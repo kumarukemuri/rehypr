@@ -14,17 +14,17 @@ function set_brightness --description "Set brightness for all, main, or secondar
                 case main
                     # DP-1
                     set target_buses 7
-                case sec secondary
+                case sec
                     # HDMI-A-1 and DP-2
                     set target_buses 4 8
                 case '*'
-                    echo "Error: target must be 'main', 'sec', or 'secondary'"
+                    echo "Error: target must be 'main' or 'sec'
                     return 2
             end
         case '*'
             echo "Usage:"
             echo "  set_brightness <0-100>"
-            echo "  set_brightness <main|sec|secondary> <0-100>"
+            echo "  set_brightness <main|sec> <0-100>"
             return 2
     end
 
