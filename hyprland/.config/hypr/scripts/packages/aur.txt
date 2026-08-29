@@ -1,0 +1,6 @@
+# Required by the configuration
+grimblast-git
+hyprland-per-window-layout
+
+# Browser
+zen-browser-bin

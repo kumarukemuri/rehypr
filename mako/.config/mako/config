@@ -1,0 +1,18 @@
+include=~/.config/mako/mako-colors
+
+sort=-time
+layer=overlay
+anchor=top-center
+text-alignment=center
+width=300
+height=100
+border-size=0
+border-radius=10
+icons=0
+default-timeout=3000
+ignore-timeout=1
+font=Noto Sans Regular 13
+
+[category=mpd]
+default-timeout=3000
+group-by=category

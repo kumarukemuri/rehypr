@@ -1,0 +1,124 @@
+{
+  "layer": "top",
+  "output": ["eDP-1", "DP-1"],
+  "margin-top": 0,
+  "spacing": 6,
+  "modules-center": [
+    "hyprland/workspaces",
+    "bluetooth",
+    "network",
+    // "hyprland/language",
+    "group/expand",
+    "battery",
+    "group/clockmenu",
+  ],
+  "group/clockmenu": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 400,
+      "transition-left-to-right": true,
+      "click-to-reveal": true,
+    },
+    "modules": ["clock", "group/toggles"],
+  },
+  "group/expand": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 400,
+      "transition-left-to-right": true,
+      "click-to-reveal": true,
+    },
+    "modules": ["custom/expand", "tray"],
+  },
+  "custom/expand": {
+    "format": "",
+    "tooltip": false,
+  },
+  "group/toggles": {
+    "orientation": "horizontal",
+    "modules": ["wireplumber", "idle_inhibitor"],
+  },
+  "hyprland/workspaces": {
+    "format": "{icon}",
+
+    "format-icons": {
+      "urgent": "󰀨",
+      // "active": "",
+      "default": "",
+    },
+
+    "sort-by": "number",
+    "move-to-monitor": true,
+  },
+  "clock": {
+    "format": "{:%I:%M %p}",
+    "tooltip-format": "{:%A, %B %d, %Y}",
+  },
+  "wireplumber": {
+    "format": "{icon}",
+    "format-muted": "",
+    "format-icons": ["", "󰪞", "󰪟", "󰪠", "󰪡", "󰪢", "󰪣", "󰪤", "󰪥"],
+    "tooltip-format": "{node_name} @ {volume}%",
+  },
+  "battery": {
+    "format": "{icon} {capacity} %",
+    "format-charging": "󰂄 {capacity} %",
+    "format-icons": ["󰂃", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "states": {
+      "critical": 10,
+    },
+    "interval": 2,
+    "tooltip": true,
+    "tooltip-format": "{time} remaining",
+  },
+  "network": {
+    "format-wifi": "",
+    "format-ethernet": "󰖟",
+    "format-disconnected": "󰕑",
+    "tooltip-format-wifi": " {essid} - ({signalStrength}%)",
+    "tooltip-format-ethernet": "󰈀 {ifname} > {ipaddr}",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 50,
+    "on-click-middle": "~/.config/waybar/scripts/proxyr.sh restart",
+  },
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "us",
+    "format-ru": "ru",
+  },
+  "bluetooth": {
+    "format": "",
+    "format-connected": "󰂱",
+    "format-connected-battery": "󰂱",
+    "tooltip-format": "{num_connections} connected",
+    "tooltip-format-connected": "{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+    "on-click-middle": "~/.config/waybar/scripts/bt-disconnect.sh",
+    "interval": 2,
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip": true,
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "format-icons": {
+      "default": "󰯯",
+      "performance": "󰰙",
+      "balanced": "󰯯",
+      "power-saver": "󰰍",
+    },
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "tooltip-format": "Caffeine {status}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": "󱠛",
+    },
+  },
+  "tray": {
+    "icon-size": 18,
+    "spacing": 12,
+    "show-passive-items": false,
+  },
+}

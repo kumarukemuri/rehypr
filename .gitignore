@@ -1,0 +1,69 @@
+# Generated theme colors
+themes/.local/share/themes/adw-gtk3/gtk-3.0/colors.css
+themes/.local/share/themes/adw-gtk3/gtk-4.0/colors.css
+themes/.local/share/themes/adw-gtk3-dark/gtk-3.0/colors.css
+themes/.local/share/themes/adw-gtk3-dark/gtk-4.0/colors.css
+
+kitty/.config/kitty/colors.conf
+mako/.config/mako/mako-colors
+rofi/.config/rofi/colors.rasi
+swayosd/.config/swayosd/colors.css
+waybar/.config/waybar/colors.css
+
+# Runtime symlinks created by systemctl --user enable
+hyprland/.config/systemd/user/*.target.wants/
+
+# Environment files
+.env
+.env.*
+.env.local
+.env.production
+.env.development
+.env.staging
+*.env
+
+# Credentials & secrets
+credentials.json
+service-account-*.json
+*-keys.json
+secrets.yaml
+secrets.yml
+secrets.json
+vault/*
+*.p12
+*.jks
+*.keystore
+id_ed25519*
+id_rsa*
+ssh_host_*_key
+authorized_keys
+known_hosts
+
+# Token files
+.token
+tokens.txt
+auth.json
+aws-credentials
+.env.secrets
+
+# Terraform state (may contain secrets)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!variables.tfvars
+
+# Docker/compose overrides with secrets
+docker-compose.override.yml
+docker-compose.local.yml
+
+# IDE & editor secrets
+.vscode/*.secret*
+.idea/*credentials*
+
+# OS-generated files (often contain sensitive data)
+.DS_Store
+Thumbs.db
+Desktop.ini
+themes/.local/share/
+themes/.local/

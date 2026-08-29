@@ -1,0 +1,136 @@
+@import url("colors.css");
+
+* {
+    all: unset;
+    font-family: "Roboto", "JetBrainsMono Nerd Font Propo";
+    font-size: 20px;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: #000000;
+}
+
+/* Outer center container */
+.modules-center {
+    color: @on_background;
+    background-color: transparent;
+    border-radius: 0;
+    padding: 0px 5px 0px 8px;
+}
+
+/* Workspaces */
+#workspaces {
+    padding-right: 24px;
+}
+
+#workspaces button {
+    font-size: 19px;
+    padding: 0px 4px;
+    margin: 7px 0px;
+}
+
+#workspaces button.active {
+    color: @primary_fixed;
+}
+
+/* Small standalone glyph modules */
+#network,
+#bluetooth,
+#custom-expand {
+    font-size: 19px;
+    padding: 0px 4px;
+    margin: 0px;
+}
+
+/* Tray: external spacing matches normal modules */
+#tray {
+    padding: 0px 4px;
+    margin: 0px 6px;
+    background: transparent;
+}
+
+/* Clock pill */
+#clock {
+    font-weight: 400;
+    font-size: 19px;
+    color: @on_primary;
+    background-color: @primary_fixed;
+    border-radius: 999px;
+    padding: 0px 9px;
+    margin: 7px 0px 7px 4px;
+}
+
+#battery {
+    font-weight: 400;
+    font-size: 19px;
+    color: @on_primary;
+    background-color: @primary_fixed;
+    border-radius: 999px;
+    padding: 0px 9px;
+    margin: 7px 0px 7px 4px;
+}
+
+/* Nested expand group */
+
+#custom-expand {
+    color: @error;
+}
+
+#expand {
+    padding: 0px;
+    margin: 0px;
+    background: transparent;
+}
+
+/* Inner toggles group */
+#toggles {
+    padding: 0px;
+    margin: 4px;
+    background: transparent;
+}
+
+/* Toggle modules */
+#power-profiles-daemon,
+#idle_inhibitor,
+#wireplumber,
+#backlight {
+    color: @on_background;
+    background: transparent;
+    font-size: 19px;
+    padding: 0px 8px;
+    margin: 0px;
+}
+
+/* Tray menu */
+#tray menu {
+    padding: 6px;
+    background-color: @background;
+    box-shadow: none;
+    border-radius: 12px;
+}
+
+#tray menu menuitem {
+    padding: 6px;
+}
+
+#tray menu menuitem:hover {
+    padding: 6px;
+    border-radius: 8px;
+    background-color: @primary;
+}
+
+#tray menu menuitem:hover label {
+    color: @outline_variant;
+}
+
+/* Tooltip */
+tooltip,
+tooltip label {
+    border: none;
+    border-radius: 8px;
+    padding: 6px;
+    margin: 2px;
+    color: @on_background;
+    background: @background;
+}

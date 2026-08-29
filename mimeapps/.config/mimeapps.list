@@ -1,0 +1,23 @@
+[Default Applications]
+application/json=zen.desktop;
+application/pdf=zen.desktop;
+application/xhtml+xml=zen.desktop;
+application/xml=zen.desktop;
+image/avif=imv.desktop;
+image/png=imv.desktop
+image/jpeg=imv.desktop
+image/webp=imv.desktop
+image/gif=imv.desktop
+image/svg+xml=zen.desktop;
+image/webp=zen.desktop;
+inode/directory=nemo.desktop;
+text/html=zen.desktop;
+text/xml=zen.desktop;
+x-scheme-handler/http=zen.desktop;
+x-scheme-handler/https=zen.desktop;
+x-scheme-handler/mailto=zen.desktop;
+x-scheme-handler/jetbrains=jetbrainsd.desktop
+
+[Default Applications]
+x-scheme-handler/mattermost=mattermost-desktop.desktop
+x-scheme-handler/discord=vesktop.desktop

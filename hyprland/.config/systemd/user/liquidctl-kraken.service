@@ -1,0 +1,16 @@
+[Unit]
+Description=Apply NZXT Kraken X63 pump curve
+Documentation=https://github.com/liquidctl/liquidctl/blob/main/docs/kraken-x3-z3-guide.md
+After=graphical-session-pre.target
+ConditionPathExists=/usr/bin/liquidctl
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/liquidctl --match "Kraken X" initialize
+ExecStart=/usr/bin/liquidctl --match "Kraken X" --direct-access set pump speed 20 30 30 50 34 80 40 90 50 100
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=3s
+
+[Install]
+WantedBy=default.target

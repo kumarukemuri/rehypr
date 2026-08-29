@@ -1,0 +1,16 @@
+[Unit]
+Description=GPU Screen Recorder replay buffer
+PartOf=graphical-session.target
+After=graphical-session.target pipewire.service wireplumber.service
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/gpu-screen-recorder -v no -w DP-1 -f 60 -fm cfr -c mp4 -k hevc -encoder gpu -bm cbr -q 12000 -ac opus -ab 192 -a "app-inverse:discord|app-inverse:vesktop|app-inverse:telegram|app-inverse:zen|app-inverse:spotify|app-inverse:mattermost|app-inverse:steam" -r 120 -replay-storage ram -restart-replay-on-save no -cursor yes -cr limited -keyint 2 -o %h/Videos/Replays
+KillSignal=SIGINT
+Restart=on-failure
+RestartSec=5s
+Slice=background-graphical.slice
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=SwayOSD graphical server
+PartOf=graphical-session.target
+After=graphical-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/swayosd-server
+Restart=on-failure
+Slice=session-graphical.slice
+
+[Install]
+WantedBy=graphical-session.target

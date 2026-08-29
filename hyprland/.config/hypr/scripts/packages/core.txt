@@ -1,0 +1,84 @@
+# Build and dotfile tools
+base-devel
+git
+stow
+sudo
+
+# Hyprland session
+hypridle
+hyprland
+hyprlock
+hyprpaper
+hyprpicker
+uwsm
+xdg-desktop-portal-gtk
+xdg-desktop-portal-hyprland
+
+# Desktop
+fish
+keyd
+kitty
+mako
+mangohud
+matugen
+polkit-gnome
+rofi
+swayosd
+waybar
+
+# Terminal utilities
+bluetui
+btop
+fastfetch
+impala
+less
+wiremix
+
+# File manager and desktop integration
+7zip
+cpio
+file-roller
+gvfs
+gvfs-mtp
+nemo
+nemo-fileroller
+papirus-icon-theme
+qt5ct
+qt6ct
+unrar
+unzip
+udisks2
+xdg-user-dirs
+xdg-utils
+zip
+
+# Audio, network and Bluetooth
+alsa-utils
+bluez
+bluez-utils
+gst-plugin-pipewire
+libpulse
+networkmanager
+pipewire
+pipewire-alsa
+pipewire-audio
+pipewire-jack
+pipewire-pulse
+power-profiles-daemon
+wireplumber
+
+# Commands used by the configuration
+ddcutil
+gpu-screen-recorder
+jq
+libnotify
+playerctl
+wl-clipboard
+
+# Fonts
+noto-fonts
+noto-fonts-emoji
+ttf-jetbrains-mono-nerd
+ttf-nerd-fonts-symbols
+ttf-roboto
+ttf-roboto-mono-nerd

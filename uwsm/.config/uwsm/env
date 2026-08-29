@@ -1,0 +1,10 @@
+export XDG_CURRENT_DESKTOP=Hyprland
+export XDG_SESSION_TYPE=wayland
+export XDG_SESSION_DESKTOP=Hyprland
+export GTK_THEME=adw-gtk3-dark
+export GDK_BACKEND=wayland
+export QT_QPA_PLATFORM="wayland;xcb"
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export QT_QPA_PLATFORMTHEME="qt6ct:qt5ct"
+#export MANGOHUD=1
+export GRIMBLAST_HIDE_CURSOR=0
