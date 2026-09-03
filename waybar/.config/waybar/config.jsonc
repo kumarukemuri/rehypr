@@ -36,7 +36,7 @@
   },
   "group/toggles": {
     "orientation": "horizontal",
-    "modules": ["wireplumber", "idle_inhibitor"],
+    "modules": ["wireplumber", "power-profiles-daemon", "idle_inhibitor"],
   },
   "hyprland/workspaces": {
     "format": "{icon}",
