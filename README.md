@@ -129,6 +129,7 @@ liquidctl --match "Kraken X" status
 | `Super + W/A/S/D` | Focus a window by direction |
 | `Super + Shift + arrow` | Swap a window by direction |
 | `Super + Delete` | Open the power menu |
+| `Super + Shift + Delete` | Reload Hyprland and desktop services |
 | `Super + Shift + L` | Lock with Hyprlock |
 | `Super + Shift + P` | Choose a wallpaper |
 | `Super + Shift + C` | Pick a color |
@@ -186,7 +187,7 @@ Monitor brightness over DDC/CI can be changed from Fish:
 ```fish
 set_brightness 50             # all monitors
 set_brightness main 50        # DP-1
-set_brightness secondary 50   # DP-2 and HDMI-A-1
+set_brightness sec 50   # DP-2 and HDMI-A-1
 ```
 
 ## Update

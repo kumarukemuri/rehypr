@@ -23,7 +23,7 @@ for _, id in ipairs({ 5 }) do
         monitor = "DP-2",
         layout = "scrolling",
         layout_opts = {
-            direction = "down",
+            direction = "up",
         },
     })
 end
@@ -34,7 +34,7 @@ for _, id in ipairs({ 4 }) do
         monitor = "HDMI-A-1",
         layout = "scrolling",
         layout_opts = {
-            direction = "down",
+            direction = "up",
         },
     })
 end

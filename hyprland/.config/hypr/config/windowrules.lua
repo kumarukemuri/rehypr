@@ -27,6 +27,7 @@ rule({
     },
     tag = "+tg_media_viewer",
     opacity = "1",
+    float = true,
 })
 
 
@@ -76,7 +77,7 @@ rule({
         initial_class = "mpv",
     },
     tag = "+mpv",
-    workspace = "1",
+    -- workspace = "3",
 })
 
 -- Games
@@ -86,6 +87,8 @@ rule({
     },
     workspace = "1",
     fullscreen = true,
+    float = true,
+    center = true,
     idle_inhibit = "always",
 })
 

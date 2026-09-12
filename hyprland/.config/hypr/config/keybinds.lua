@@ -12,6 +12,7 @@ local mute = scriptDir .. "/mute.sh"
 local grimblaster = scriptDir .. "/grimblaster.sh"
 local runner = [[rofi -show drun -run-command "uwsm app -- {cmd}"]]
 local power = "bash " .. home .. "/.config/rofi/power.sh"
+local reload = "bash " .. home .. "/.config/rofi/reloader.sh"
 local lock = "hyprlock"
 local wallpaper = "bash " .. home .. "/.config/rofi/wallpaper.sh"
 local terminal = "uwsm app -- kitty"
@@ -33,26 +34,11 @@ local function osd(args)
         args
 end
 
--- Main keys ================================================
-bind(mainMod .. " + ESCAPE", function()
-    local workspace = hl.get_active_special_workspace()
-    if not workspace then return end
-    local name = workspace.name:match("^special:(.+)$") or ""
-    hl.dispatch(hl.dsp.workspace.toggle_special(name))
-end)
-
--- local shell = { { key = "RETURN" }, { key = "GRAVE" } }
-
--- for _, group in ipairs({ shell }) do
---     for _, ws in ipairs(group) do
---         bind(mainMod .. " + " .. ws.key, hl.dsp.workspace.toggle_special("shell"))
---     end
--- end
-
 bind(mainMod .. " + C", hl.dsp.window.close())
 -- bind(mainMod .. " + GRAVE", exec(terminal))
 bind(mainMod .. " + SHIFT + C", exec(color))
 bind(mainMod .. " + DELETE", exec(power))
+bind(mainMod .. " + SHIFT + DELETE", exec(reload))
 bind(mainMod .. " + SHIFT + L", exec(lock))
 bind(mainMod .. " + SHIFT + P", exec(wallpaper))
 bind(mainMod .. " + RETURN", exec(runner))
@@ -94,12 +80,10 @@ bind(mainMod .. " + W", hl.dsp.focus({ direction = "u" }))
 bind(mainMod .. " + S", hl.dsp.focus({ direction = "d" }))
 bind(mainMod .. " + D", hl.dsp.focus({ direction = "r" }))
 bind(mainMod .. " + A", hl.dsp.focus({ direction = "l" }))
-bind(mainMod .. " + SHIFT + UP", hl.dsp.window.swap({ direction = "u" }))
-bind(mainMod .. " + SHIFT + DOWN", hl.dsp.window.swap({ direction = "d" }))
-bind(mainMod .. " + SHIFT + LEFT", hl.dsp.window.swap({ direction = "l" }))
-bind(mainMod .. " + SHIFT + RIGHT", hl.dsp.window.swap({ direction = "r" }))
-
-
+bind(mainMod .. " + SHIFT + W", hl.dsp.window.swap({ direction = "u" }))
+bind(mainMod .. " + SHIFT + S", hl.dsp.window.swap({ direction = "d" }))
+bind(mainMod .. " + SHIFT + D", hl.dsp.window.swap({ direction = "l" }))
+bind(mainMod .. " + SHIFT + A", hl.dsp.window.swap({ direction = "r" }))
 
 bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })

@@ -17,7 +17,7 @@
     "drawer": {
       "transition-duration": 400,
       "transition-left-to-right": true,
-      "click-to-reveal": true,
+      "click-to-reveal": false,
     },
     "modules": ["clock", "group/toggles"],
   },
