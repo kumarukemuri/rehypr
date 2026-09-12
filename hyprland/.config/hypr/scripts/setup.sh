@@ -2,7 +2,8 @@
 
 set -Eeuo pipefail
 
-readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_PATH="$(realpath -- "${BASH_SOURCE[0]}")"
+readonly SCRIPT_DIR="$(dirname -- "$SCRIPT_PATH")"
 readonly REPO_DIR="$(cd -- "$SCRIPT_DIR/../../../.." && pwd)"
 readonly PACKAGES_DIR="$SCRIPT_DIR/packages"
 readonly TARGET_USER="$(id -un)"
@@ -133,10 +134,17 @@ command -v pacman >/dev/null 2>&1 || {
     exit 1
 }
 
+installed_package_names="$(pacman -Qq)" || {
+    printf 'Failed to query installed packages.\n' >&2
+    exit 1
+}
+
 declare -A installed_packages=()
 while IFS= read -r package; do
-    installed_packages["$package"]=1
-done < <(pacman -Qq)
+    if [[ -n "$package" ]]; then
+        installed_packages["$package"]=1
+    fi
+done <<< "$installed_package_names"
 
 native_installed=()
 native_missing=()
@@ -154,6 +162,16 @@ print_package_group 'AUR packages already installed' aur_installed
 printf '\n'
 print_package_group 'AUR packages to install' aur_missing
 
+check_stow_conflicts() {
+    if command -v stow >/dev/null 2>&1; then
+        stow --simulate --dir="$REPO_DIR" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
+    else
+        printf 'Stow conflict check deferred until Stow is installed.\n'
+    fi
+}
+
+check_stow_conflicts
+
 if $dry_run; then
     cat <<EOF
 
@@ -163,7 +181,9 @@ Post-install actions:
   restow ${STOW_PACKAGES[*]} from $REPO_DIR into $TARGET_HOME
   enable and start audio user units: ${AUDIO_USER_UNITS[*]}
   enable user services: ${USER_SERVICES[*]}
-  create optional Matugen output directories
+  create Matugen output directories
+  initialize missing theme colors and wallpaper paths without reloading the desktop
+  leave optional Kraken and replay services disabled unless already enabled
   set Fish as the login shell for $TARGET_USER
   create the standard XDG user directories
 EOF
@@ -216,6 +236,24 @@ else
     printf 'All AUR packages are already installed.\n'
 fi
 
+# Check again now that Stow is guaranteed to be installed.
+check_stow_conflicts
+
+printf 'Linking dotfiles from %s...\n' "$REPO_DIR"
+mkdir -p -- "$TARGET_HOME/.config" "$TARGET_HOME/.local/share/themes"
+stow --dir="$REPO_DIR" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
+mkdir -p -- "${MATUGEN_OUTPUT_DIRS[@]}"
+
+# Generated colors are not tracked, so a fresh checkout needs an initial palette.
+if [[ ! -f "$TARGET_HOME/.config/rofi/colors.rasi" ||
+      ! -f "$TARGET_HOME/.config/kitty/colors.conf" ||
+      ! -f "$TARGET_HOME/.config/mako/mako-colors" ||
+      ! -f "$TARGET_HOME/.config/waybar/colors.css" ||
+      ! -f "$TARGET_HOME/.config/swayosd/colors.css" ]]; then
+    printf 'Initializing wallpaper and application colors...\n'
+    "$SCRIPT_DIR/set-wallpaper.sh" "$TARGET_HOME/.config/hypr/wallpapers/woods.jpg" --no-reload
+fi
+
 printf 'Enabling network and Bluetooth services...\n'
 sudo systemctl enable --now NetworkManager.service bluetooth.service
 
@@ -223,11 +261,6 @@ printf 'Installing the keyd Alt/Super mapping...\n'
 sudo install -Dm644 -- "$KEYD_CONFIG" /etc/keyd/hypr.conf
 sudo systemctl enable keyd.service
 sudo systemctl restart keyd.service
-
-printf 'Linking dotfiles from %s...\n' "$REPO_DIR"
-mkdir -p -- "$TARGET_HOME/.config" "$TARGET_HOME/.local/share/themes"
-stow --dir="$REPO_DIR" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
-mkdir -p -- "${MATUGEN_OUTPUT_DIRS[@]}"
 
 printf 'Enabling graphical session services for %s...\n' "$TARGET_USER"
 systemctl --user daemon-reload

@@ -21,6 +21,10 @@ the monitor, input and autostart files before using it.
 
 ## Install
 
+The entry point is [`hyprland.lua`](hyprland/.config/hypr/hyprland.lua).
+This configuration requires Hyprland with support for the Lua `hl` API used
+in the repository.
+
 Clone the repository to `~/.rehypr`:
 
 ```bash
@@ -44,6 +48,10 @@ The installer:
 - enables the PipeWire, PipeWire Pulse and WirePlumber user units;
 - installs the Keyd mapping to `/etc/keyd/hypr.conf` and starts Keyd;
 - enables graphical-session user services for the Hyprland components;
+- checks for Stow conflicts before installation when Stow is available, and again
+  after package installation before linking files;
+- initializes the wallpaper and Matugen palette when required application color
+  files are missing, without reloading the desktop;
 - refreshes every dotfile package in the current user's home with `stow --restow`;
 - sets Fish as the login shell;
 - prepares automatic Hyprland startup on TTY1 through UWSM.
@@ -53,7 +61,8 @@ a regular user; it requests `sudo` only when needed.
 
 `--dry-run` uses `pacman -Qq` to show which official and AUR packages are
 already installed and which ones are missing. It does not install packages or
-change system configuration.
+change system configuration. If Stow is available, it also simulates linking
+the dotfiles and reports conflicts.
 
 The minimal package profile includes:
 
@@ -116,18 +125,44 @@ systemctl --user status liquidctl-kraken.service
 liquidctl --match "Kraken X" status
 ```
 
+### GPU Screen Recorder replay
+
+The bundled [replay service](hyprland/.config/systemd/user/gpu-screen-recorder-replay.service)
+records `DP-1` at 60 FPS with a 120-second RAM buffer, HEVC video and Opus
+audio, saving MP4 clips to `~/Videos/Replays`. Its audio filter excludes
+Discord, Vesktop, Telegram, Zen, Spotify, Mattermost and Steam.
+
+The installer installs GPU Screen Recorder but does not enable this service.
+Review the monitor and recording options in the unit, then enable it from a
+running graphical session:
+
+```bash
+mkdir -p "$HOME/Videos/Replays"
+systemctl --user daemon-reload
+systemctl --user enable --now gpu-screen-recorder-replay.service
+systemctl --user status gpu-screen-recorder-replay.service
+```
+
+`Super + R` calls `~/.local/bin/save-gsr-replay`, which is not included in this
+repository. Provide that helper or update the binding before using the shortcut.
+The keybinding comment still mentions 30 seconds; the service configures 120.
+
 ## Keybindings
+
+Modifiers below refer to the logical keys after Keyd remapping: physical Alt
+acts as `Super`, and physical left Super acts as `Alt`.
 
 | Key | Action |
 | --- | --- |
 | `Super + Return` | Open Rofi |
-| `Super + Escape` | Open Kitty or close the active special workspace |
+| `Super + Escape` | Open Kitty |
 | `Super + X` | Open Nemo |
 | `Super + C` | Close the active window |
 | `Super + F` | Toggle fullscreen |
 | `Super + V` | Toggle floating mode |
 | `Super + W/A/S/D` | Focus a window by direction |
-| `Super + Shift + arrow` | Swap a window by direction |
+| `Super + Shift + W/S` | Swap a window up/down |
+| `Super + Shift + A/D` | Swap a window right/left |
 | `Super + Delete` | Open the power menu |
 | `Super + Shift + Delete` | Reload Hyprland and desktop services |
 | `Super + Shift + L` | Lock with Hyprlock |
@@ -137,14 +172,18 @@ liquidctl --match "Kraken X" status
 | `Super + Q/E` | Focus workspace 4/5 |
 | `Super + Shift + workspace key` | Move a window to that workspace |
 | `Super + Tab` | Focus the next monitor |
-| `Super + R` | Save the last 30 seconds of replay |
-| `Print` | Screenshot all monitors |
+| `Super + R` | Run the external replay-save helper (see above) |
+| `Print` | Screenshot the focused monitor |
 | `Ctrl + Print` | Screenshot the active window |
 | `Alt + Shift + S` | Screenshot a selected area |
 | `Super + mouse button 1/2` | Move or resize a window |
 
 See [`keybinds.lua`](hyprland/.config/hypr/config/keybinds.lua) for the complete
 list, including volume, media and brightness controls.
+
+Screenshots are copied to the clipboard and saved as timestamped PNG files in
+`$(xdg-user-dir PICTURES)/Screenshots`, falling back to `~/Pictures/Screenshots`
+when `xdg-user-dir` is unavailable. Area selection freezes the image while selecting.
 
 ## Wallpapers and colors
 
@@ -161,12 +200,11 @@ The wallpaper script:
 Matugen can also be run directly:
 
 ```bash
-matugen image --mode dark /path/to/wallpaper.jpg
+matugen image --mode dark --prefer darkness --type scheme-tonal-spot /path/to/wallpaper.jpg
 ```
 
-Templates for btop, Qt and Vesktop are kept even though those applications are
-not all part of the minimal install. btop is installed by default; after
-installing Vesktop, generate the palette again and enable
+btop and Qt color templates are included in the default setup. Vesktop is
+optional; after installing it, generate the palette again and enable
 `midnight-discord.css` once in Vencord. Later palette changes update the same
 file automatically.
 
@@ -187,8 +225,13 @@ Monitor brightness over DDC/CI can be changed from Fish:
 ```fish
 set_brightness 50             # all monitors
 set_brightness main 50        # DP-1
-set_brightness sec 50   # DP-2 and HDMI-A-1
+set_brightness sec 50         # DP-2 and HDMI-A-1
 ```
+
+The [brightness function](fish/.config/fish/functions/set_brightness.fish)
+uses fixed I²C bus numbers: `7` for the main monitor and `4`/`8` for the
+secondary monitors. Run `ddcutil detect` and adjust those numbers for your
+hardware before using it.
 
 ## Update
 
@@ -199,6 +242,9 @@ git -C "$HOME/.rehypr" pull --ff-only
 mkdir -p "$HOME/.local/share/themes"
 stow --dir="$HOME/.rehypr" --restow --target="$HOME" fish hyprland kitty mako mangohud matugen mimeapps qtct rofi swayosd themes uwsm waybar
 ```
+
+If package lists or installer actions changed, rerun `setup.sh --dry-run`
+and then `setup.sh` to apply them.
 
 Reload the running desktop configuration with:
 
@@ -211,9 +257,13 @@ To remove the links, run `stow --delete` with the same package list.
 ## Notes
 
 - The current monitor layout expects `DP-1`, `DP-2` and `HDMI-A-1`.
-- Workspaces 1–3 belong to `DP-1`, workspace 4 to `HDMI-A-1`, and workspace 5
-  to `DP-2`.
+- Workspaces 1–3 use Dwindle on `DP-1`; workspace 4 on `HDMI-A-1` and
+  workspace 5 on `DP-2` use vertical scrolling. Workspace 7 also maps to
+  `HDMI-A-1` with Dwindle.
 - The keyboard layout switches between `us` and `ru` with Caps Lock.
-- Kitty and Zen Browser start with the Hyprland session.
+- Autostart launches Kitty, Zen Browser and Mattermost Desktop. Mattermost
+  is not in the package lists; install it separately or remove its autostart entry.
+- Hypridle turns displays off after 60 seconds of inactivity and restores them
+  on activity. It locks before sleep; there is no timed idle-lock listener.
 - Package installation is intended for Arch Linux and uses `sudo`, `pacman`
   and `yay`.
