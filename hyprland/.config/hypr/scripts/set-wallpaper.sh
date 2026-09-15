@@ -3,7 +3,6 @@
 set -Eeuo pipefail
 
 readonly WALLPAPER_CONFIG="${HYPRPAPER_CONFIG:-$HOME/.config/hypr/hyprpaper.conf}"
-readonly HYPRLOCK_CONFIG="${HYPRLOCK_CONFIG:-$HOME/.config/hypr/hyprlock.conf}"
 readonly SELECTED_WALLPAPER="${1:-}"
 readonly RELOAD_MODE="${2:-}"
 [[ "$RELOAD_MODE" == "" || "$RELOAD_MODE" == "--no-reload" ]] || {
@@ -25,13 +24,7 @@ fail() {
 [[ -n "$SELECTED_WALLPAPER" ]] || fail "No wallpaper was selected"
 [[ -f "$SELECTED_WALLPAPER" ]] || fail "Wallpaper was not found: $SELECTED_WALLPAPER"
 [[ -f "$WALLPAPER_CONFIG" ]] || fail "Hyprpaper config was not found: $WALLPAPER_CONFIG"
-[[ -f "$HYPRLOCK_CONFIG" ]] || fail "Hyprlock config was not found: $HYPRLOCK_CONFIG"
 command -v matugen >/dev/null 2>&1 || fail "matugen was not found"
-
-# GNU Stow may expose these files through symlinks. Resolve their targets so
-# replacing a temporary file does not remove the Stow link itself.
-wallpaper_target="$(realpath -- "$WALLPAPER_CONFIG")"
-hyprlock_target="$(realpath -- "$HYPRLOCK_CONFIG")"
 
 mapfile -t monitors < <(
     sed -nE 's/^[[:space:]]*monitor[[:space:]]*=[[:space:]]*(.+)[[:space:]]*$/\1/p' \
@@ -45,59 +38,8 @@ fi
 ((${#monitors[@]} > 0)) || fail "No monitors were found"
 
 selected_path="$(realpath -- "$SELECTED_WALLPAPER")"
-temporary_config="$(mktemp "${wallpaper_target}.XXXXXX")"
-temporary_lock_config="$(mktemp "${hyprlock_target}.XXXXXX")"
-temporary_matugen_config=""
-cleanup() {
-    rm -f -- "$temporary_config" "$temporary_lock_config"
-    if [[ -n "$temporary_matugen_config" ]]; then
-        rm -f -- "$temporary_matugen_config"
-    fi
-}
-trap cleanup EXIT
-
-{
-    for monitor in "${monitors[@]}"; do
-        cat <<EOF
-wallpaper {
-    monitor = $monitor
-    path = $selected_path
-    fit_mode = cover
-}
-
-EOF
-    done
-    printf 'splash = false\n'
-} >"$temporary_config"
-
-WALLPAPER_PATH="$selected_path" awk '
-    /^[[:space:]]*background[[:space:]]*\{/ {
-        in_background = 1
-    }
-
-    in_background && !updated && /^[[:space:]]*path[[:space:]]*=/ {
-        equals = index($0, "=")
-        print substr($0, 1, equals) " " ENVIRON["WALLPAPER_PATH"]
-        updated = 1
-        next
-    }
-
-    in_background && /^[[:space:]]*}/ {
-        in_background = 0
-    }
-
-    { print }
-
-    END {
-        if (!updated) exit 1
-    }
-' "$hyprlock_target" >"$temporary_lock_config" ||
-    fail "Hyprlock background path was not found"
-
-chmod --reference="$wallpaper_target" "$temporary_config" 2>/dev/null || true
-chmod --reference="$hyprlock_target" "$temporary_lock_config" 2>/dev/null || true
-mv -- "$temporary_config" "$wallpaper_target"
-mv -- "$temporary_lock_config" "$hyprlock_target"
+# Matugen writes $image to colors.conf, shared by Hyprpaper and Hyprlock.
+matugen image --mode dark --prefer darkness --type scheme-tonal-spot "$selected_path"
 
 if [[ "$RELOAD_MODE" != "--no-reload" ]] && command -v hyprctl >/dev/null 2>&1; then
     for monitor in "${monitors[@]}"; do
@@ -105,17 +47,8 @@ if [[ "$RELOAD_MODE" != "--no-reload" ]] && command -v hyprctl >/dev/null 2>&1; 
     done
 fi
 
-matugen_args=()
-if [[ "$RELOAD_MODE" == "--no-reload" ]]; then
-    temporary_matugen_config="$(mktemp)"
-    sed '/^[[:space:]]*post_hook[[:space:]]*=/d' \
-        "$HOME/.config/matugen/config.toml" > "$temporary_matugen_config"
-    matugen_args+=(--config "$temporary_matugen_config")
-fi
-matugen "${matugen_args[@]}" image --mode dark --prefer darkness --type scheme-tonal-spot "$selected_path"
-
 if [[ "$RELOAD_MODE" != "--no-reload" && -x "$HOME/.config/rofi/reloader.sh" ]]; then
-    "$HOME/.config/rofi/reloader.sh" >/dev/null 2>&1 &
+    "$HOME/.config/rofi/reloader.sh" --theme
 fi
 
 if [[ "$RELOAD_MODE" != "--no-reload" ]]; then

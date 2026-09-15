@@ -50,8 +50,9 @@ The installer:
 - enables graphical-session user services for the Hyprland components;
 - checks for Stow conflicts before installation when Stow is available, and again
   after package installation before linking files;
-- initializes the wallpaper and Matugen palette when required application color
-  files are missing, without reloading the desktop;
+- initializes missing application and Hyprland colors without reloading the desktop,
+  reusing the existing `$image` when available and falling back to `woods.jpg`;
+- creates Qt settings with palette paths for the current user;
 - refreshes every dotfile package in the current user's home with `stow --restow`;
 - sets Fish as the login shell;
 - prepares automatic Hyprland startup on TTY1 through UWSM.
@@ -78,6 +79,7 @@ The authoritative package lists are
 
 Before starting Hyprland, check these files:
 
+- [`outputs.lua`](hyprland/.config/hypr/config/outputs.lua) — shared main, left and right output names for Lua configs;
 - [`monitors.lua`](hyprland/.config/hypr/config/monitors.lua) — monitor names, positions and scaling;
 - [`workspaces.lua`](hyprland/.config/hypr/config/workspaces.lua) — workspace-to-monitor mapping;
 - [`input.lua`](hyprland/.config/hypr/config/input.lua) — keyboard, mouse and touchpad settings;
@@ -193,15 +195,24 @@ Press `Super + Shift + P` to choose an image from
 The wallpaper script:
 
 - applies the image to every configured monitor;
-- updates the Hyprlock background;
-- generates a dark Matugen palette;
-- reloads the themed desktop components.
+- generates a dark Matugen palette and writes `$image` to `~/.config/hypr/colors.conf`;
+- shares that variable between Hyprpaper and Hyprlock without rewriting their configs;
+- reloads Hyprland once and restarts only active Mako, Waybar and SwayOSD services.
 
-Matugen can also be run directly:
+Theme changes leave Hypridle, Polkit and the per-window layout helper running.
+Generated Hyprland colors are local files ignored by Git, so choosing a wallpaper
+does not change tracked configuration files.
+
+Matugen can also generate the palette directly. Apply the generated colors
+with the theme-only reload command:
 
 ```bash
 matugen image --mode dark --prefer darkness --type scheme-tonal-spot /path/to/wallpaper.jpg
+~/.config/rofi/reloader.sh --theme
 ```
+
+This direct command sequence updates colors. Use the wallpaper picker to also
+apply the image to the running Hyprpaper session.
 
 btop and Qt color templates are included in the default setup. Vesktop is
 optional; after installing it, generate the palette again and enable
@@ -240,8 +251,13 @@ Pull changes and refresh the Stow links:
 ```bash
 git -C "$HOME/.rehypr" pull --ff-only
 mkdir -p "$HOME/.local/share/themes"
-stow --dir="$HOME/.rehypr" --restow --target="$HOME" fish hyprland kitty mako mangohud matugen mimeapps qtct rofi swayosd themes uwsm waybar
+stow --dir="$HOME/.rehypr" --restow --target="$HOME" fish hyprland kitty mako mangohud matugen mimeapps rofi swayosd themes uwsm waybar
 ```
+
+Qt5ct and Qt6ct settings are created from `system/qtct/*.conf.in` by setup.
+Their working configs are local files; repeated setup updates only the palette
+path and preserves other settings. Run setup once when updating from the older
+Stow-managed Qt configuration. Existing files and symlinks are preserved.
 
 If package lists or installer actions changed, rerun `setup.sh --dry-run`
 and then `setup.sh` to apply them.

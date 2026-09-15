@@ -1,11 +1,13 @@
 function set_brightness --description "Set brightness for all, main, or secondary monitors"
+    set -l main_buses 7
+    set -l secondary_buses 4 8
     set -l value
     set -l target_buses
 
     switch (count $argv)
         case 1
             set value $argv[1]
-            set target_buses 4 7 8
+            set target_buses $secondary_buses[1] $main_buses $secondary_buses[2..-1]
         case 2
             set -l target (string lower -- $argv[1])
             set value $argv[2]
@@ -13,10 +15,10 @@ function set_brightness --description "Set brightness for all, main, or secondar
             switch $target
                 case main
                     # DP-1
-                    set target_buses 7
+                    set target_buses $main_buses
                 case sec secondary
                     # HDMI-A-1 and DP-2
-                    set target_buses 4 8
+                    set target_buses $secondary_buses
                 case '*'
                     echo "Error: target must be 'main', 'sec', or 'secondary'"
                     return 2

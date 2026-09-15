@@ -1,3 +1,5 @@
+local outputs = require("config.outputs")
+
 local rule = hl.workspace_rule
 
 --------------------------
@@ -9,7 +11,7 @@ local rule = hl.workspace_rule
 for _, id in ipairs({ 1, 2, 3, }) do
     rule({
         workspace = tostring(id),
-        monitor = "DP-1",
+        monitor = outputs.main,
         layout = "dwindle"
     })
 end
@@ -20,7 +22,7 @@ end
 for _, id in ipairs({ 5 }) do
     rule({
         workspace = tostring(id),
-        monitor = "DP-2",
+        monitor = outputs.right,
         layout = "scrolling",
         layout_opts = {
             direction = "up",
@@ -31,7 +33,7 @@ end
 for _, id in ipairs({ 4 }) do
     rule({
         workspace = tostring(id),
-        monitor = "HDMI-A-1",
+        monitor = outputs.left,
         layout = "scrolling",
         layout_opts = {
             direction = "up",
@@ -43,7 +45,7 @@ end
 -- TV
 rule({
     workspace = 7,
-    monitor = "HDMI-A-1",
+    monitor = outputs.left,
     layout = "dwindle"
 })
 

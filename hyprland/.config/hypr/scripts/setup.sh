@@ -17,7 +17,6 @@ readonly -a STOW_PACKAGES=(
     mangohud
     matugen
     mimeapps
-    qtct
     rofi
     swayosd
     themes
@@ -181,6 +180,7 @@ Post-install actions:
   restow ${STOW_PACKAGES[*]} from $REPO_DIR into $TARGET_HOME
   enable and start audio user units: ${AUDIO_USER_UNITS[*]}
   enable user services: ${USER_SERVICES[*]}
+  create or update Qt color paths while preserving existing settings
   create Matugen output directories
   initialize missing theme colors and wallpaper paths without reloading the desktop
   leave optional Kraken and replay services disabled unless already enabled
@@ -244,14 +244,47 @@ mkdir -p -- "$TARGET_HOME/.config" "$TARGET_HOME/.local/share/themes"
 stow --dir="$REPO_DIR" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
 mkdir -p -- "${MATUGEN_OUTPUT_DIRS[@]}"
 
+# Qt stores absolute palette paths; preserve all other user settings.
+for qt_version in 5 6; do
+    qt_dir="$TARGET_HOME/.config/qt${qt_version}ct"
+    qt_config="$qt_dir/qt${qt_version}ct.conf"
+    mkdir -p -- "$qt_dir"
+    if [[ ! -f "$qt_config" ]]; then
+        cp -- "$REPO_DIR/system/qtct/qt${qt_version}ct.conf.in" "$qt_config"
+    fi
+    qt_target="$(realpath -- "$qt_config")"
+    qt_temp="$(mktemp "${qt_target}.XXXXXX")"
+    if COLOR_SCHEME_PATH="$qt_dir/colors/matugen.conf" awk '
+        /^\[Appearance\]$/ { appearance = 1; print; print "color_scheme_path=" ENVIRON["COLOR_SCHEME_PATH"]; next }
+        /^\[/ { appearance = 0 }
+        appearance && /^color_scheme_path=/ { next }
+        { print }
+    ' "$qt_target" > "$qt_temp"; then
+        chmod --reference="$qt_target" "$qt_temp"
+        mv -- "$qt_temp" "$qt_target"
+    else
+        rm -f -- "$qt_temp"
+        exit 1
+    fi
+done
+
 # Generated colors are not tracked, so a fresh checkout needs an initial palette.
-if [[ ! -f "$TARGET_HOME/.config/rofi/colors.rasi" ||
+if [[ ! -f "$TARGET_HOME/.config/hypr/colors.conf" ||
+      ! -f "$TARGET_HOME/.config/hypr/config/colors.lua" ||
+      ! -f "$TARGET_HOME/.config/rofi/colors.rasi" ||
       ! -f "$TARGET_HOME/.config/kitty/colors.conf" ||
       ! -f "$TARGET_HOME/.config/mako/mako-colors" ||
       ! -f "$TARGET_HOME/.config/waybar/colors.css" ||
       ! -f "$TARGET_HOME/.config/swayosd/colors.css" ]]; then
     printf 'Initializing wallpaper and application colors...\n'
-    "$SCRIPT_DIR/set-wallpaper.sh" "$TARGET_HOME/.config/hypr/wallpapers/woods.jpg" --no-reload
+    wallpaper=""
+    if [[ -f "$TARGET_HOME/.config/hypr/colors.conf" ]]; then
+        wallpaper="$(sed -n 's/^\$image = //p' "$TARGET_HOME/.config/hypr/colors.conf" | head -n 1)"
+    fi
+    if [[ ! -f "$wallpaper" ]]; then
+        wallpaper="$TARGET_HOME/.config/hypr/wallpapers/woods.jpg"
+    fi
+    "$SCRIPT_DIR/set-wallpaper.sh" "$wallpaper" --no-reload
 fi
 
 printf 'Enabling network and Bluetooth services...\n'

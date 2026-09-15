@@ -47,7 +47,7 @@ rule({
         initial_class = "^(discord|vesktop|TeamSpeak.*|WebCord)$",
     },
     tag = "+voice",
-    workspace = "4",
+    workspace = "5",
     no_initial_focus = true,
     opacity = "0.94"
 })

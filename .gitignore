@@ -67,3 +67,9 @@ Thumbs.db
 Desktop.ini
 themes/.local/share/
 themes/.local/
+
+# Per-user files generated during setup or theme selection
+hyprland/.config/hypr/colors.conf
+hyprland/.config/hypr/config/colors.lua
+qtct/.config/qt5ct/qt5ct.conf
+qtct/.config/qt6ct/qt6ct.conf
