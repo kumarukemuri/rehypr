@@ -1,17 +1,17 @@
 # Generated theme colors
-themes/.local/share/themes/adw-gtk3/gtk-3.0/colors.css
-themes/.local/share/themes/adw-gtk3/gtk-4.0/colors.css
-themes/.local/share/themes/adw-gtk3-dark/gtk-3.0/colors.css
-themes/.local/share/themes/adw-gtk3-dark/gtk-4.0/colors.css
+dotfiles/themes/.local/share/themes/adw-gtk3/gtk-3.0/colors.css
+dotfiles/themes/.local/share/themes/adw-gtk3/gtk-4.0/colors.css
+dotfiles/themes/.local/share/themes/adw-gtk3-dark/gtk-3.0/colors.css
+dotfiles/themes/.local/share/themes/adw-gtk3-dark/gtk-4.0/colors.css
 
-kitty/.config/kitty/colors.conf
-mako/.config/mako/mako-colors
-rofi/.config/rofi/colors.rasi
-swayosd/.config/swayosd/colors.css
-waybar/.config/waybar/colors.css
+dotfiles/kitty/.config/kitty/colors.conf
+dotfiles/mako/.config/mako/mako-colors
+dotfiles/rofi/.config/rofi/colors.rasi
+dotfiles/swayosd/.config/swayosd/colors.css
+dotfiles/waybar/.config/waybar/colors.css
 
 # Runtime symlinks created by systemctl --user enable
-hyprland/.config/systemd/user/*.target.wants/
+dotfiles/hyprland/.config/systemd/user/*.target.wants/
 
 # Environment files
 .env
@@ -65,11 +65,10 @@ docker-compose.local.yml
 .DS_Store
 Thumbs.db
 Desktop.ini
-themes/.local/share/
-themes/.local/
+dotfiles/themes/.local/share/themes/adw-gtk3/
 
 # Per-user files generated during setup or theme selection
-hyprland/.config/hypr/colors.conf
-hyprland/.config/hypr/config/colors.lua
+dotfiles/hyprland/.config/hypr/colors.conf
+dotfiles/hyprland/.config/hypr/config/colors.lua
 qtct/.config/qt5ct/qt5ct.conf
 qtct/.config/qt6ct/qt6ct.conf

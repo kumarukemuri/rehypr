@@ -19,9 +19,20 @@ the monitor, input and autostart files before using it.
 - system-wide Alt/Super remapping through Keyd;
 - helper scripts for screenshots, wallpapers and session controls.
 
+## Repository layout
+
+- `dotfiles/` contains GNU Stow packages mirroring paths under the user's home.
+- `install/` contains setup, restow, migration, package lists, Qt templates and
+  system-wide Keyd configuration. These files are not linked into the home.
+- Runtime helpers remain inside their application packages.
+
+Setup and restow require Python 3 (`python` on Arch) for migration checks.
+The isolated regression checks are `python3 install/tests/test_layout.py` and
+`python3 install/tests/test_setup.py` (the latter also requires Matugen).
+
 ## Install
 
-The entry point is [`hyprland.lua`](hyprland/.config/hypr/hyprland.lua).
+The entry point is [`hyprland.lua`](dotfiles/hyprland/.config/hypr/hyprland.lua).
 This configuration requires Hyprland with support for the Lua `hl` API used
 in the repository.
 
@@ -35,8 +46,8 @@ cd ~/.rehypr
 Preview and run the installer from any directory:
 
 ```bash
-~/.rehypr/hyprland/.config/hypr/scripts/setup.sh --dry-run
-~/.rehypr/hyprland/.config/hypr/scripts/setup.sh
+~/.rehypr/install/setup.sh --dry-run
+~/.rehypr/install/setup.sh
 ```
 
 The installer:
@@ -74,17 +85,17 @@ The minimal package profile includes:
 - utilities required by the configuration, including ddcutil and GPU Screen Recorder.
 
 The authoritative package lists are
-[`core.txt`](hyprland/.config/hypr/scripts/packages/core.txt) and
-[`aur.txt`](hyprland/.config/hypr/scripts/packages/aur.txt).
+[`core.txt`](install/packages/core.txt) and
+[`aur.txt`](install/packages/aur.txt).
 
 Before starting Hyprland, check these files:
 
-- [`outputs.lua`](hyprland/.config/hypr/config/outputs.lua) — shared main, left and right output names for Lua configs;
-- [`monitors.lua`](hyprland/.config/hypr/config/monitors.lua) — monitor names, positions and scaling;
-- [`workspaces.lua`](hyprland/.config/hypr/config/workspaces.lua) — workspace-to-monitor mapping;
-- [`input.lua`](hyprland/.config/hypr/config/input.lua) — keyboard, mouse and touchpad settings;
-- [`autostart.lua`](hyprland/.config/hypr/config/autostart.lua) — programs started with Hyprland;
-- [`windowrules.lua`](hyprland/.config/hypr/config/windowrules.lua) — application placement rules.
+- [`outputs.lua`](dotfiles/hyprland/.config/hypr/config/outputs.lua) — shared main, left and right output names for Lua configs;
+- [`monitors.lua`](dotfiles/hyprland/.config/hypr/config/monitors.lua) — monitor names, positions and scaling;
+- [`workspaces.lua`](dotfiles/hyprland/.config/hypr/config/workspaces.lua) — workspace-to-monitor mapping;
+- [`input.lua`](dotfiles/hyprland/.config/hypr/config/input.lua) — keyboard, mouse and touchpad settings;
+- [`autostart.lua`](dotfiles/hyprland/.config/hypr/config/autostart.lua) — programs started with Hyprland;
+- [`windowrules.lua`](dotfiles/hyprland/.config/hypr/config/windowrules.lua) — application placement rules.
 
 Display and input names can be found with:
 
@@ -104,7 +115,7 @@ session. The installer enables them without starting them immediately.
 PipeWire, PipeWire Pulse and WirePlumber are enabled and started immediately
 in the user service manager. Keyd runs as a system service and maps both Alt
 keys to Super while mapping the left Super key to Alt. Its source configuration
-is [`system/keyd/hypr.conf`](system/keyd/hypr.conf).
+is [`install/system/keyd/hypr.conf`](install/system/keyd/hypr.conf).
 
 ## Optional post-install actions
 
@@ -129,7 +140,7 @@ liquidctl --match "Kraken X" status
 
 ### GPU Screen Recorder replay
 
-The bundled [replay service](hyprland/.config/systemd/user/gpu-screen-recorder-replay.service)
+The bundled [replay service](dotfiles/hyprland/.config/systemd/user/gpu-screen-recorder-replay.service)
 records `DP-1` at 60 FPS with a 120-second RAM buffer, HEVC video and Opus
 audio, saving MP4 clips to `~/Videos/Replays`. Its audio filter excludes
 Discord, Vesktop, Telegram, Zen, Spotify, Mattermost and Steam.
@@ -180,7 +191,7 @@ acts as `Super`, and physical left Super acts as `Alt`.
 | `Alt + Shift + S` | Screenshot a selected area |
 | `Super + mouse button 1/2` | Move or resize a window |
 
-See [`keybinds.lua`](hyprland/.config/hypr/config/keybinds.lua) for the complete
+See [`keybinds.lua`](dotfiles/hyprland/.config/hypr/config/keybinds.lua) for the complete
 list, including volume, media and brightness controls.
 
 Screenshots are copied to the clipboard and saved as timestamped PNG files in
@@ -239,28 +250,51 @@ set_brightness main 50        # DP-1
 set_brightness sec 50         # DP-2 and HDMI-A-1
 ```
 
-The [brightness function](fish/.config/fish/functions/set_brightness.fish)
+The [brightness function](dotfiles/fish/.config/fish/functions/set_brightness.fish)
 uses fixed I²C bus numbers: `7` for the main monitor and `4`/`8` for the
 secondary monitors. Run `ddcutil detect` and adjust those numbers for your
 hardware before using it.
 
 ## Update
 
-Pull changes and refresh the Stow links:
+When updating from the old repository layout, migrate links once after pulling:
+
+```bash
+./install/restow.sh --migrate --dry-run
+./install/restow.sh --migrate
+```
+
+Migration replaces only links into the old layout of this checkout. It preserves
+local generated files, restores legacy Qt links as ordinary settings, and updates
+wallpaper paths inside generated Hyprland palettes. Conflicting files stop the
+migration before links change. Backups and a path manifest are stored under
+`${XDG_STATE_HOME:-$HOME/.local/state}/rehypr/migration-*`; failed application
+restores the original links. Old local source files are retained for inspection.
+If a Qt color directory was lost, choose a wallpaper again to regenerate colors.
+Migration does not install packages or restart the desktop.
+
+For subsequent updates, pull changes and refresh the Stow links:
+
 
 ```bash
 git -C "$HOME/.rehypr" pull --ff-only
-mkdir -p "$HOME/.local/share/themes"
-stow --dir="$HOME/.rehypr" --restow --target="$HOME" fish hyprland kitty mako mangohud matugen mimeapps rofi swayosd themes uwsm waybar
+"$HOME/.rehypr/install/restow.sh" --dry-run
+"$HOME/.rehypr/install/restow.sh"
 ```
 
-Qt5ct and Qt6ct settings are created from `system/qtct/*.conf.in` by setup.
+From the repository root, use `./install/restow.sh`. The script also works from any
+other directory and checks for conflicts before changing links. It shares
+[`install/stow-packages.txt`](install/stow-packages.txt) with the installer,
+excluding README and service-only directories. It does not install packages,
+migrate Qt settings or restart services.
+
+Qt5ct and Qt6ct settings are created from `install/templates/qtct/*.conf.in` by setup.
 Their working configs are local files; repeated setup updates only the palette
 path and preserves other settings. Run setup once when updating from the older
 Stow-managed Qt configuration. Existing files and symlinks are preserved.
 
-If package lists or installer actions changed, rerun `setup.sh --dry-run`
-and then `setup.sh` to apply them.
+If package lists or installer actions changed, rerun `./install/setup.sh --dry-run`
+and then `./install/setup.sh` to apply them.
 
 Reload the running desktop configuration with:
 
@@ -268,7 +302,8 @@ Reload the running desktop configuration with:
 ~/.config/rofi/reloader.sh
 ```
 
-To remove the links, run `stow --delete` with the same package list.
+To remove the links, run `stow --delete` with the packages listed in
+`install/stow-packages.txt`.
 
 ## Notes
 

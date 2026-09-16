@@ -1,5 +1,6 @@
 # Build and dotfile tools
 base-devel
+python
 git
 stow
 sudo

@@ -1,0 +1,12 @@
+fish
+hyprland
+kitty
+mako
+mangohud
+matugen
+mimeapps
+rofi
+swayosd
+themes
+uwsm
+waybar

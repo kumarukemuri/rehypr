@@ -4,25 +4,13 @@ set -Eeuo pipefail
 
 readonly SCRIPT_PATH="$(realpath -- "${BASH_SOURCE[0]}")"
 readonly SCRIPT_DIR="$(dirname -- "$SCRIPT_PATH")"
-readonly REPO_DIR="$(cd -- "$SCRIPT_DIR/../../../.." && pwd)"
+readonly REPO_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 readonly PACKAGES_DIR="$SCRIPT_DIR/packages"
 readonly TARGET_USER="$(id -un)"
 readonly TARGET_HOME="$HOME"
-readonly KEYD_CONFIG="$REPO_DIR/system/keyd/hypr.conf"
-readonly -a STOW_PACKAGES=(
-    fish
-    hyprland
-    kitty
-    mako
-    mangohud
-    matugen
-    mimeapps
-    rofi
-    swayosd
-    themes
-    uwsm
-    waybar
-)
+readonly KEYD_CONFIG="$REPO_DIR/install/system/keyd/hypr.conf"
+mapfile -t STOW_PACKAGES < "$SCRIPT_DIR/stow-packages.txt"
+readonly -a STOW_PACKAGES
 readonly -a USER_SERVICES=(
     hypridle.service
     hyprland-per-window-layout.service
@@ -162,8 +150,13 @@ printf '\n'
 print_package_group 'AUR packages to install' aur_missing
 
 check_stow_conflicts() {
+    command -v python3 >/dev/null 2>&1 || {
+        printf 'Required command was not found: python3 (Arch package: python)\n' >&2
+        exit 1
+    }
+    python3 "$SCRIPT_DIR/migrate.py" --check
     if command -v stow >/dev/null 2>&1; then
-        stow --simulate --dir="$REPO_DIR" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
+        stow --simulate --dir="$REPO_DIR/dotfiles" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
     else
         printf 'Stow conflict check deferred until Stow is installed.\n'
     fi
@@ -241,7 +234,7 @@ check_stow_conflicts
 
 printf 'Linking dotfiles from %s...\n' "$REPO_DIR"
 mkdir -p -- "$TARGET_HOME/.config" "$TARGET_HOME/.local/share/themes"
-stow --dir="$REPO_DIR" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
+stow --dir="$REPO_DIR/dotfiles" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
 mkdir -p -- "${MATUGEN_OUTPUT_DIRS[@]}"
 
 # Qt stores absolute palette paths; preserve all other user settings.
@@ -250,7 +243,7 @@ for qt_version in 5 6; do
     qt_config="$qt_dir/qt${qt_version}ct.conf"
     mkdir -p -- "$qt_dir"
     if [[ ! -f "$qt_config" ]]; then
-        cp -- "$REPO_DIR/system/qtct/qt${qt_version}ct.conf.in" "$qt_config"
+        cp -- "$SCRIPT_DIR/templates/qtct/qt${qt_version}ct.conf.in" "$qt_config"
     fi
     qt_target="$(realpath -- "$qt_config")"
     qt_temp="$(mktemp "${qt_target}.XXXXXX")"
@@ -284,7 +277,7 @@ if [[ ! -f "$TARGET_HOME/.config/hypr/colors.conf" ||
     if [[ ! -f "$wallpaper" ]]; then
         wallpaper="$TARGET_HOME/.config/hypr/wallpapers/woods.jpg"
     fi
-    "$SCRIPT_DIR/set-wallpaper.sh" "$wallpaper" --no-reload
+    "$REPO_DIR/dotfiles/hyprland/.config/hypr/scripts/set-wallpaper.sh" "$wallpaper" --no-reload
 fi
 
 printf 'Enabling network and Bluetooth services...\n'
