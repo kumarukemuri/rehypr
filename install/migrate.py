@@ -77,7 +77,7 @@ def main():
              for p in links_under(HOME / root) if owned_old(link_target(p))]
     if args.check:
         if links:
-            sys.exit('Old checkout links detected. Run install/restow.sh --migrate first.')
+            sys.exit('Old checkout links detected. Run install/setup.sh --migrate first.')
         return
 
     if not links:

@@ -52,6 +52,7 @@ udisks2
 xdg-user-dirs
 xdg-utils
 zip
+unrar
 
 # Audio, network and Bluetooth
 alsa-utils
@@ -65,7 +66,7 @@ pipewire-alsa
 pipewire-audio
 pipewire-jack
 pipewire-pulse
-power-profiles-daemon
+tuned-ppd
 wireplumber
 
 # Commands used by the configuration

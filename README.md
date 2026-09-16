@@ -22,11 +22,11 @@ the monitor, input and autostart files before using it.
 ## Repository layout
 
 - `dotfiles/` contains GNU Stow packages mirroring paths under the user's home.
-- `install/` contains setup, restow, migration, package lists, Qt templates and
+- `install/` contains setup, migration, package lists, Qt templates and
   system-wide Keyd configuration. These files are not linked into the home.
 - Runtime helpers remain inside their application packages.
 
-Setup and restow require Python 3 (`python` on Arch) for migration checks.
+Setup requires Python 3 (`python` on Arch) for migration checks.
 The isolated regression checks are `python3 install/tests/test_layout.py` and
 `python3 install/tests/test_setup.py` (the latter also requires Matugen).
 
@@ -43,11 +43,16 @@ git clone https://github.com/kumarukemuri/rehypr.git ~/.rehypr
 cd ~/.rehypr
 ```
 
+Run `./install/setup.sh` from the repository root to choose installation,
+restow, migration or exit from a numbered menu. Without an explicit action,
+`--dry-run` also shows the menu and previews the selected action. EOF cancels
+without making changes. Use the action flags below for non-interactive use.
+
 Preview and run the installer from any directory:
 
 ```bash
-~/.rehypr/install/setup.sh --dry-run
-~/.rehypr/install/setup.sh
+~/.rehypr/install/setup.sh --install --dry-run
+~/.rehypr/install/setup.sh --install
 ```
 
 The installer:
@@ -260,8 +265,8 @@ hardware before using it.
 When updating from the old repository layout, migrate links once after pulling:
 
 ```bash
-./install/restow.sh --migrate --dry-run
-./install/restow.sh --migrate
+./install/setup.sh --migrate --dry-run
+./install/setup.sh --migrate
 ```
 
 Migration replaces only links into the old layout of this checkout. It preserves
@@ -278,14 +283,14 @@ For subsequent updates, pull changes and refresh the Stow links:
 
 ```bash
 git -C "$HOME/.rehypr" pull --ff-only
-"$HOME/.rehypr/install/restow.sh" --dry-run
-"$HOME/.rehypr/install/restow.sh"
+"$HOME/.rehypr/install/setup.sh" --restow --dry-run
+"$HOME/.rehypr/install/setup.sh" --restow
 ```
 
-From the repository root, use `./install/restow.sh`. The script also works from any
-other directory and checks for conflicts before changing links. It shares
-[`install/stow-packages.txt`](install/stow-packages.txt) with the installer,
-excluding README and service-only directories. It does not install packages,
+From the repository root, use `./install/setup.sh --restow`. The script also works from any
+other directory and checks for conflicts before changing links. All actions use
+[`install/stow-packages.txt`](install/stow-packages.txt),
+excluding README and service-only directories. The restow action does not install packages,
 migrate Qt settings or restart services.
 
 Qt5ct and Qt6ct settings are created from `install/templates/qtct/*.conf.in` by setup.
@@ -293,8 +298,8 @@ Their working configs are local files; repeated setup updates only the palette
 path and preserves other settings. Run setup once when updating from the older
 Stow-managed Qt configuration. Existing files and symlinks are preserved.
 
-If package lists or installer actions changed, rerun `./install/setup.sh --dry-run`
-and then `./install/setup.sh` to apply them.
+If package lists or installer actions changed, rerun `./install/setup.sh --install --dry-run`
+and then `./install/setup.sh --install` to apply them.
 
 Reload the running desktop configuration with:
 

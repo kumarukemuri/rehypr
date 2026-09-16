@@ -6,7 +6,7 @@ rule({
         initial_class = "^(firefox|brave-browser|librewolf|zen)$",
     },
     tag = "+browser",
-    workspace = "2",
+    workspace = "1",
 })
 
 -- Telegram
@@ -58,7 +58,7 @@ rule({
         initial_class = "^(codium|VSCodium|vscodium|dev.zed.Zed|jetbrains-pycharm|jetbrains-idea)$",
     },
     tag = "+ide",
-    workspace = "3",
+    workspace = "2",
     opacity = "0.94"
 })
 
@@ -85,7 +85,7 @@ rule({
     match = {
         initial_class = "^(steam_app_.*|gamescope)$",
     },
-    workspace = "1",
+    workspace = "3",
     fullscreen = true,
     float = true,
     center = true,
@@ -97,7 +97,7 @@ rule({
     match = {
         initial_class = "^steam$",
     },
-    workspace = "1",
+    workspace = "3",
     tag = "+steam",
     opacity = "0.94",
 })

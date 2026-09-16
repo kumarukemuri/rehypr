@@ -34,15 +34,21 @@ readonly -a MATUGEN_OUTPUT_DIRS=(
 
 dry_run=false
 noconfirm=false
+action=""
 
 usage() {
     cat <<'EOF'
-Usage: setup.sh [options]
+Usage: setup.sh [--install | --restow | --migrate] [options]
 
-Installs and configures the minimal rehypr desktop for the current user.
+Manage the rehypr desktop for the current user. Without an action, show a menu.
+
+Actions:
+  --install     Install packages and configure the desktop
+  --restow      Refresh dotfile links only
+  --migrate     Migrate legacy links and refresh dotfile links
 
 Options:
-  --dry-run      Show packages and post-install actions without changing the system
+  --dry-run      Preview the selected action without changing the system
   --noconfirm    Pass --noconfirm to pacman, yay and makepkg
   -h, --help     Show this help
 EOF
@@ -50,6 +56,10 @@ EOF
 
 while (($#)); do
     case "$1" in
+        --install | --restow | --migrate)
+            [[ -z "$action" ]] || { printf 'Choose only one action.\n' >&2; exit 2; }
+            action="${1#--}"
+            ;;
         --dry-run) dry_run=true ;;
         --noconfirm) noconfirm=true ;;
         -h | --help)
@@ -68,6 +78,58 @@ done
 if ((EUID == 0)); then
     printf 'Run this script as a regular user, not with sudo.\n' >&2
     exit 1
+fi
+
+if [[ -z "$action" ]]; then
+    while true; do
+        printf '\nrehypr\n  1) Install and configure desktop\n  2) Restow dotfiles\n  3) Migrate legacy links and restow\n  0) Exit\n'
+        printf 'Select action [0-3]: '
+        if ! IFS= read -r choice; then
+            printf '\nNo action selected. Use --install, --restow or --migrate.\n' >&2
+            exit 2
+        fi
+        case "$choice" in
+            1) action=install; break ;;
+            2) action=restow; break ;;
+            3) action=migrate; break ;;
+            0) exit 0 ;;
+            *) printf 'Enter 0, 1, 2 or 3.\n' >&2 ;;
+        esac
+    done
+fi
+
+if $noconfirm && [[ "$action" != install ]]; then
+    printf '%s\n' '--noconfirm is only supported with --install.' >&2
+    exit 2
+fi
+
+((${#STOW_PACKAGES[@]})) || { printf 'The Stow package list is empty.\n' >&2; exit 1; }
+for package in "${STOW_PACKAGES[@]}"; do
+    [[ "$package" =~ ^[a-zA-Z0-9_-]+$ && -d "$REPO_DIR/dotfiles/$package" ]] || {
+        printf 'Invalid or missing Stow package: %s\n' "$package" >&2
+        exit 1
+    }
+done
+
+command -v python3 >/dev/null 2>&1 || {
+    printf 'Required command was not found: python3 (Arch package: python)\n' >&2
+    exit 1
+}
+
+if [[ "$action" != install ]]; then
+    command -v stow >/dev/null 2>&1 || { printf 'Required command was not found: stow\n' >&2; exit 1; }
+    if [[ "$action" == migrate ]]; then
+        args=()
+        if $dry_run; then args+=(--dry-run); fi
+        exec python3 "$SCRIPT_DIR/migrate.py" "${args[@]}"
+    fi
+    python3 "$SCRIPT_DIR/migrate.py" --check
+    stow --simulate --dir="$REPO_DIR/dotfiles" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
+    if $dry_run; then exit 0; fi
+    mkdir -p -- "$TARGET_HOME/.config" "$TARGET_HOME/.local/share/themes"
+    stow --dir="$REPO_DIR/dotfiles" --target="$TARGET_HOME" --restow "${STOW_PACKAGES[@]}"
+    printf 'Dotfile links refreshed.\n'
+    exit 0
 fi
 
 read_package_file() {

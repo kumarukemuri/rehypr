@@ -12,7 +12,7 @@ with tempfile.TemporaryDirectory(prefix='setup-layout-') as td:
  for p in [r/'dotfiles/hyprland/.config/hypr/colors.conf',r/'dotfiles/hyprland/.config/hypr/config/colors.lua']:p.unlink()
  env=dict(os.environ,HOME=str(home),XDG_CONFIG_HOME=str(home/'.config'),PATH=str(bin)+':'+os.environ['PATH'],TEST_PACKAGES=str(b/'packages'))
  for args in [['--dry-run'],[],[]]:
-  result=subprocess.run(['bash',str(r/'install/setup.sh'),*args],cwd=b,env=env,capture_output=True,text=True)
+  result=subprocess.run(['bash',str(r/'install/setup.sh'),'--install',*args],cwd=b,env=env,capture_output=True,text=True)
   assert result.returncode==0,result.stdout+result.stderr
   if args:assert not list(home.iterdir())
  assert (home/'.config/hypr/colors.conf').exists()

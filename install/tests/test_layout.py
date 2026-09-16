@@ -5,9 +5,16 @@ with tempfile.TemporaryDirectory(prefix='layout-test-') as td:
  base=Path(td);r=base/'repo space';shutil.copytree(repo,r,symlinks=True,ignore=shutil.ignore_patterns('.git','__pycache__'))
  home=base/'home';home.mkdir();env=dict(os.environ,HOME=str(home),XDG_STATE_HOME=str(home/'.local/state'))
  def run(*args,ok=True):
-  result=subprocess.run(['bash',str(r/'install/restow.sh'),*args],cwd=base,env=env,capture_output=True,text=True)
+  result=subprocess.run(['bash',str(r/'install/setup.sh'),*(['--restow'] if '--migrate' not in args else []),*args],cwd=base,env=env,capture_output=True,text=True)
   if ok:assert result.returncode==0,result.stdout+result.stderr
   return result
+ for text, options, code in [('0\n', [], 0), ('', [], 2), ('bad\n2\n', ['--dry-run'], 0), ('3\n', ['--dry-run'], 0)]:
+  result=subprocess.run(['bash',str(r/'install/setup.sh'),*options],input=text,cwd=base,env=env,capture_output=True,text=True)
+  assert result.returncode==code,result.stdout+result.stderr
+  assert not list(home.iterdir())
+ for options in [['--install','--restow'],['--restow','--noconfirm'],['--unknown']]:
+  result=subprocess.run(['bash',str(r/'install/setup.sh'),*options],cwd=base,env=env,capture_output=True,text=True)
+  assert result.returncode==2,result.stdout+result.stderr
  run('--dry-run');assert not list(home.iterdir())
  run();run();assert (home/'.config/hypr').resolve()==r/'dotfiles/hyprland/.config/hypr'
  # Recreate legacy HOME links after a pull; ignored palette files remained behind.
