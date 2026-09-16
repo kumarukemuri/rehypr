@@ -52,5 +52,5 @@ if [[ "$RELOAD_MODE" != "--no-reload" && -x "$HOME/.config/rofi/reloader.sh" ]];
 fi
 
 if [[ "$RELOAD_MODE" != "--no-reload" ]]; then
-    notify_result "Wallpaper changed" "$(basename "$selected_path") · dark Matugen theme generated"
+    notify_result "Wallpaper changed" "$(basename "$selected_path") selected · Matugen theme generated"
 fi
