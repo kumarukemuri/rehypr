@@ -2,8 +2,8 @@
 
 * {
     all: unset;
-    font-family: "Roboto", "JetBrainsMono Nerd Font Propo";
-    font-size: 20px;
+    font-family: "JetBrains Mono Regular", "JetBrainsMono Nerd Font Propo";
+    font-size: 16px;
     min-height: 0;
 }
 
@@ -16,90 +16,56 @@ window#waybar {
     color: @on_background;
     background-color: transparent;
     border-radius: 0;
-    padding: 0px 5px 0px 8px;
+    padding: 4px 8px;
 }
 
-/* Workspaces */
-#workspaces {
-    padding-right: 24px;
-}
-
-#workspaces button {
-    font-size: 19px;
-    padding: 0px 4px;
-    margin: 7px 0px;
-}
-
-#workspaces button.active {
-    color: @primary_fixed;
-}
-
-/* Small standalone glyph modules */
+/* Equal icon cells, including each individual tray item. */
 #network,
 #bluetooth,
-#custom-expand {
-    font-size: 19px;
-    padding: 0px 4px;
+#wireplumber,
+#idle_inhibitor {
+    min-width: 18px;
+    padding: 0px 6px;
     margin: 0px;
-}
-
-/* Tray: external spacing matches normal modules */
-#tray {
-    padding: 0px 4px;
-    margin: 0px 6px;
+    color: @on_background;
     background: transparent;
 }
 
-/* Clock pill */
+#tray {
+    padding: 0px 6px;
+    margin: 0px;
+    background: transparent;
+}
+
+#tray > widget {
+    min-width: 18px;
+    padding: 0px;
+    margin: 0px;
+}
+
+/* Always-visible clock */
 #clock {
-    font-weight: 400;
-    font-size: 19px;
-    color: @on_primary;
-    background-color: @primary_fixed;
-    border-radius: 999px;
-    padding: 0px 9px;
-    margin: 7px 0px 7px 4px;
+    font-weight: 600;
+    color: alpha(@primary, 0.65);
+    padding: 0px 6px;
+    margin: 2px 0px;
 }
 
 #battery {
     font-weight: 400;
-    font-size: 19px;
     color: @on_primary;
     background-color: @primary_fixed;
     border-radius: 999px;
     padding: 0px 9px;
-    margin: 7px 0px 7px 4px;
+    margin: 0px 6px;
 }
 
-/* Nested expand group */
-
-#custom-expand {
-    color: @error;
-}
-
-#expand {
+/* One hidden group: its spacing collapses with the drawer. */
+#clockmenu,
+#controls {
     padding: 0px;
     margin: 0px;
     background: transparent;
-}
-
-/* Inner toggles group */
-#toggles {
-    padding: 0px;
-    margin: 4px;
-    background: transparent;
-}
-
-/* Toggle modules */
-#power-profiles-daemon,
-#idle_inhibitor,
-#wireplumber,
-#backlight {
-    color: @on_background;
-    background: transparent;
-    font-size: 19px;
-    padding: 0px 8px;
-    margin: 0px;
 }
 
 /* Tray menu */
@@ -115,7 +81,6 @@ window#waybar {
 }
 
 #tray menu menuitem:hover {
-    padding: 6px;
     border-radius: 8px;
     background-color: @primary;
 }

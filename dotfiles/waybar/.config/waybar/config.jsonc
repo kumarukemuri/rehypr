@@ -3,15 +3,7 @@
   "output": ["eDP-1", "DP-1"],
   "margin-top": 0,
   "spacing": 6,
-  "modules-center": [
-    "hyprland/workspaces",
-    "bluetooth",
-    "network",
-    // "hyprland/language",
-    "group/expand",
-    "battery",
-    "group/clockmenu",
-  ],
+  "modules-center": ["group/clockmenu"],
   "group/clockmenu": {
     "orientation": "horizontal",
     "drawer": {
@@ -19,36 +11,11 @@
       "transition-left-to-right": true,
       "click-to-reveal": false,
     },
-    "modules": ["clock", "group/toggles"],
+    "modules": ["clock", "group/controls"],
   },
-  "group/expand": {
+  "group/controls": {
     "orientation": "horizontal",
-    "drawer": {
-      "transition-duration": 400,
-      "transition-left-to-right": true,
-      "click-to-reveal": true,
-    },
-    "modules": ["custom/expand", "tray"],
-  },
-  "custom/expand": {
-    "format": "",
-    "tooltip": false,
-  },
-  "group/toggles": {
-    "orientation": "horizontal",
-    "modules": ["wireplumber", "idle_inhibitor"],
-  },
-  "hyprland/workspaces": {
-    "format": "{icon}",
-
-    "format-icons": {
-      "urgent": "󰀨",
-      // "active": "",
-      "default": "",
-    },
-
-    "sort-by": "number",
-    "move-to-monitor": true,
+    "modules": ["network", "bluetooth", "battery", "wireplumber", "idle_inhibitor", "tray"],
   },
   "clock": {
     "format": "{:%I:%M %p}",
@@ -79,12 +46,6 @@
     "tooltip-format-ethernet": "󰈀 {ifname} > {ipaddr}",
     "tooltip-format-disconnected": "Disconnected",
     "max-length": 50,
-    "on-click-middle": "~/.config/waybar/scripts/proxyr.sh restart",
-  },
-  "hyprland/language": {
-    "format": "{}",
-    "format-en": "us",
-    "format-ru": "ru",
   },
   "bluetooth": {
     "format": "",
@@ -97,28 +58,17 @@
     "on-click-middle": "~/.config/waybar/scripts/bt-disconnect.sh",
     "interval": 2,
   },
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "tooltip": true,
-    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-    "format-icons": {
-      "default": "󰯯",
-      "performance": "󰰙",
-      "balanced": "󰯯",
-      "power-saver": "󰰍",
-    },
-  },
   "idle_inhibitor": {
     "format": "{icon}",
     "tooltip-format": "Caffeine {status}",
     "format-icons": {
-      "activated": "",
-      "deactivated": "󱠛",
+      "activated": "󰅶",
+      "deactivated": "󰛊",
     },
   },
   "tray": {
-    "icon-size": 18,
-    "spacing": 12,
+    "icon-size": 16,
+    "spacing": 16,
     "show-passive-items": false,
   },
 }

@@ -203,6 +203,13 @@ Screenshots are copied to the clipboard and saved as timestamped PNG files in
 `$(xdg-user-dir PICTURES)/Screenshots`, falling back to `~/Pictures/Screenshots`
 when `xdg-user-dir` is unavailable. Area selection freezes the image while selecting.
 
+## Waybar
+
+Only the clock is visible while the bar is collapsed. Hover over it to reveal
+network, Bluetooth, the system tray, battery (when available), volume and the
+idle inhibitor. The drawer uses a 400 ms animation; there is no separate tray
+arrow or workspace indicator. The bar keeps its black background.
+
 ## Wallpapers and colors
 
 Press `Super + Shift + P` to choose an image from
