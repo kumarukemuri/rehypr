@@ -16,7 +16,6 @@ rule({
     },
     tag = "+chat",
     workspace = "5",
-    opacity = "0.94"
 })
 
 -- Telegram Media Viewer
@@ -38,7 +37,6 @@ rule({
     },
     tag = "+mattermost",
     workspace = "5",
-    opacity = "0.94"
 })
 
 -- Voice apps
@@ -49,7 +47,6 @@ rule({
     tag = "+voice",
     workspace = "5",
     no_initial_focus = true,
-    opacity = "0.94"
 })
 
 -- IDE
@@ -59,7 +56,6 @@ rule({
     },
     tag = "+ide",
     workspace = "2",
-    opacity = "0.94"
 })
 
 -- Spotify
@@ -99,7 +95,6 @@ rule({
     },
     workspace = "3",
     tag = "+steam",
-    opacity = "0.94",
 })
 
 -- Terminal tools
@@ -109,7 +104,6 @@ rule({
     },
     tag = "+shell",
     workspace = "4",
-    opacity = "0.94"
 })
 
 -- Explorer
@@ -119,7 +113,6 @@ rule({
         initial_class = "^(Nemo|nemo)$",
     },
     tag = "+explorer",
-    opacity = "0.94",
     float = true,
     center = true,
     size = { 800, 600 },
@@ -136,7 +129,6 @@ rule({
     center = true,
     pin = true,
     size = { 800, 600 },
-    opacity = "0.94"
 })
 
 -- Polkit authentication
@@ -149,7 +141,6 @@ rule({
     float = true,
     center = true,
     pin = true,
-    opacity = "0.94"
 })
 
 
@@ -161,7 +152,6 @@ rule({
     },
     tag = "+note",
     workspace = "4",
-    opacity = "0.94"
 })
 
 -- org.pulseaudio.pavucontrol
@@ -172,7 +162,6 @@ rule({
     },
     tag = "+pavucontrol",
     workspace = "special:shell",
-    opacity = "0.94"
 })
 
 -- GSR

@@ -41,21 +41,11 @@ hl.config({
         rounding_power = 2,
 
         blur = {
-            enabled = true,
-            size = 8,
-            passes = 2,
-            new_optimizations = true
+            enabled = false,
         },
 
         shadow = {
-            enabled = true,
-            range = 16,
-            render_power = 2,
-            sharp = false,
-            color = C.shadow:gsub("^0xff", "0x66"),
-            color_inactive = "0x00000000",
-            offset = { 0, 10 },
-            scale = 0.98,
+            enabled = false,
 
         },
     },
