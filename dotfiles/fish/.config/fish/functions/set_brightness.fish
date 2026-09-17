@@ -1,4 +1,10 @@
 function set_brightness --description "Set brightness for all, main, or secondary monitors"
+    set -l profile (bash "$HOME/.config/hypr/scripts/profile.sh")
+    or return 1
+    if test "$profile" != desktop
+        echo "DDC brightness groups are configured for the desktop only; use laptop brightness keys." >&2
+        return 1
+    end
     set -l main_buses 7
     set -l secondary_buses 4 8
     set -l value

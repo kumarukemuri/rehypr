@@ -1,20 +1,6 @@
-hl.device({
-    name = "compx-io-aurora-1", -- Mouse via wire
-    sensitivity = -0.4,
-    accel_profile = "flat",
-})
-
-hl.device({
-    name = "compx-io-aurora-receiver-1", -- Mouse receiver
-    sensitivity = -0.4,
-    accel_profile = "flat",
-})
-
-hl.device({
-    name = "gxt7863:00-27c6:01e0-touchpad", -- Touchpad
-    sensitivity = 0.4,
-    accel_profile = "adaptive",
-})
+for _, device in ipairs(require("config.profile").devices) do
+    hl.device(device)
+end
 
 hl.config({
     input = {

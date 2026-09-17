@@ -53,7 +53,7 @@ bind("Print", screencutter("screen"))
 bind(altMod .. " + SHIFT + S", screencutter("area"))
 
 -- Instant replay: save the last 30 seconds from GPU Screen Recorder.
-bind(mainMod .. " + R", exec(home .. "/.local/bin/save-gsr-replay"))
+bind(mainMod .. " + R", exec("bash " .. scriptDir .. "/save-replay.sh"))
 
 -- Window management ==========================================
 hl.bind(mainMod .. " + V", function()
@@ -75,19 +75,6 @@ bind(
     hl.dsp.focus({ monitor = "+1" })
 )
 
--- Vertical stack navigation
-bind(mainMod .. " + W", hl.dsp.focus({ direction = "u" }))
-bind(mainMod .. " + S", hl.dsp.focus({ direction = "d" }))
-bind(mainMod .. " + D", hl.dsp.focus({ direction = "r" }))
-bind(mainMod .. " + A", hl.dsp.focus({ direction = "l" }))
-bind(mainMod .. " + SHIFT + W", hl.dsp.window.swap({ direction = "u" }))
-bind(mainMod .. " + SHIFT + S", hl.dsp.window.swap({ direction = "d" }))
-bind(mainMod .. " + SHIFT + D", hl.dsp.window.swap({ direction = "l" }))
-bind(mainMod .. " + SHIFT + A", hl.dsp.window.swap({ direction = "r" }))
-
-bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
-bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
-
 -- Workspace navigation =======================================
 local workspaces_left = { { key = "Q", id = 4 }, { key = "E", id = 5 } }
 local workspaces_right = { { key = "1", id = 1 }, { key = "2", id = 2 }, { key = "3", id = 3 } }
@@ -99,6 +86,17 @@ for _, group in ipairs({ workspaces_left, workspaces_right }) do
     end
 end
 
+bind(mainMod .. " + W", hl.dsp.focus({ direction = "u" }))
+bind(mainMod .. " + S", hl.dsp.focus({ direction = "d" }))
+bind(mainMod .. " + D", hl.dsp.focus({ direction = "r" }))
+bind(mainMod .. " + A", hl.dsp.focus({ direction = "l" }))
+bind(mainMod .. " + SHIFT + W", hl.dsp.window.swap({ direction = "u" }))
+bind(mainMod .. " + SHIFT + S", hl.dsp.window.swap({ direction = "d" }))
+bind(mainMod .. " + SHIFT + D", hl.dsp.window.swap({ direction = "r" }))
+bind(mainMod .. " + SHIFT + A", hl.dsp.window.swap({ direction = "l" }))
+
+bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
+bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Media control =============================================
 local media_keys = {

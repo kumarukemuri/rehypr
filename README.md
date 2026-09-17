@@ -44,7 +44,7 @@ cd ~/.rehypr
 ```
 
 Run `./install/setup.sh` from the repository root to choose installation,
-restow, migration or exit from a numbered menu. Without an explicit action,
+restow, migration, device profile selection or exit from a numbered menu. Without an explicit action,
 `--dry-run` also shows the menu and previews the selected action. EOF cancels
 without making changes. Use the action flags below for non-interactive use.
 
@@ -95,9 +95,9 @@ The authoritative package lists are
 
 Before starting Hyprland, check these files:
 
-- [`outputs.lua`](dotfiles/hyprland/.config/hypr/config/outputs.lua) — shared main, left and right output names for Lua configs;
-- [`monitors.lua`](dotfiles/hyprland/.config/hypr/config/monitors.lua) — monitor names, positions and scaling;
-- [`workspaces.lua`](dotfiles/hyprland/.config/hypr/config/workspaces.lua) — workspace-to-monitor mapping;
+- [`outputs.lua`](dotfiles/hyprland/.config/hypr/config/outputs.lua) — output names from the selected device profile;
+- [`monitors.lua`](dotfiles/hyprland/.config/hypr/config/monitors.lua) — loads the selected profile’s monitor settings;
+- [`workspaces.lua`](dotfiles/hyprland/.config/hypr/config/workspaces.lua) — loads the selected profile’s workspace mapping;
 - [`input.lua`](dotfiles/hyprland/.config/hypr/config/input.lua) — keyboard, mouse and touchpad settings;
 - [`autostart.lua`](dotfiles/hyprland/.config/hypr/config/autostart.lua) — programs started with Hyprland;
 - [`windowrules.lua`](dotfiles/hyprland/.config/hypr/config/windowrules.lua) — application placement rules.
@@ -121,6 +121,49 @@ PipeWire, PipeWire Pulse and WirePlumber are enabled and started immediately
 in the user service manager. Keyd runs as a system service and maps both Alt
 keys to Super while mapping the left Super key to Alt. Its source configuration
 is [`install/system/keyd/hypr.conf`](install/system/keyd/hypr.conf).
+
+## Device profiles
+
+The same `main` branch supports desktop and laptop configurations. With no local
+selection, `auto` detects a laptop from an eDP connector in `/sys/class/drm`,
+even if the panel is disconnected or an external monitor is attached.
+
+Use option 4 in `./install/setup.sh`, or explicitly select a profile:
+
+```bash
+./install/setup.sh --profile auto
+./install/setup.sh --profile laptop --dry-run
+./install/setup.sh --profile desktop
+```
+
+Selection is stored in `~/.config/rehypr/profile`, outside Stow and Git. Install,
+restow and pull preserve it. Invalid values are reported instead of silently
+choosing a profile. Reload Hyprland after changing it; application autostart runs
+only at session startup.
+
+- **Desktop:** keeps the three-monitor layout, workspace assignments and startup
+  of Kitty, Zen and Mattermost. Mouse-specific settings apply here.
+- **Laptop:** `eDP-1` uses its preferred mode, scale 2, position `0x0` and 8-bit
+  color. Hyprland calls automatic mode selection `preferred`, not `auto`.
+  Workspaces 1–5 and 7 use Dwindle on the panel. Only session services start;
+  the touchpad-specific settings apply here.
+- External laptop screens use their preferred modes at scale 1 and 8-bit color.
+  They are arranged to the right of the panel in output-name order, using logical
+  panel dimensions. Connecting screens does not change the profile or launch apps.
+  Workspaces from disconnected external screens are moved back to the panel.
+- Waybar remains enabled on `eDP-1` and `DP-1`. Wallpapers apply to active outputs;
+  Hyprpaper also uses the current `$image` for newly connected outputs.
+- DDC brightness groups and the replay shortcut are desktop-only. Kraken and replay
+  services remain opt-in and are not enabled by profile selection.
+
+Edit the tracked profiles in
+[`desktop.lua`](dotfiles/hyprland/.config/hypr/config/profiles/desktop.lua) and
+[`laptop.lua`](dotfiles/hyprland/.config/hypr/config/profiles/laptop.lua).
+
+Profile checks: `lua install/tests/test_profiles.lua`,
+`python3 install/tests/test_profiles.py` and `python3 install/tests/test_wallpaper.py`.
+Hotplug logic is tested with simulated events; physical laptop display behavior
+must also be checked on the laptop.
 
 ## Optional post-install actions
 
@@ -161,8 +204,10 @@ systemctl --user enable --now gpu-screen-recorder-replay.service
 systemctl --user status gpu-screen-recorder-replay.service
 ```
 
-`Super + R` calls `~/.local/bin/save-gsr-replay`, which is not included in this
-repository. Provide that helper or update the binding before using the shortcut.
+`Super + R` first checks the device profile, then calls
+`~/.local/bin/save-gsr-replay` on desktop. That external helper is not included;
+provide it before using the shortcut. On laptop the shortcut reports that replay
+is unavailable.
 The keybinding comment still mentions 30 seconds; the service configures 120.
 
 ## Keybindings
@@ -217,7 +262,7 @@ Press `Super + Shift + P` to choose an image from
 
 The wallpaper script:
 
-- applies the image to every configured monitor;
+- applies the image to every active monitor reported by Hyprland;
 - generates a dark Matugen palette and writes `$image` to `~/.config/hypr/colors.conf`;
 - shares that variable between Hyprpaper and Hyprlock without rewriting their configs;
 - reloads Hyprland once and restarts only active Mako, Waybar and SwayOSD services.
@@ -319,12 +364,12 @@ To remove the links, run `stow --delete` with the packages listed in
 
 ## Notes
 
-- The current monitor layout expects `DP-1`, `DP-2` and `HDMI-A-1`.
+- The desktop monitor layout expects `DP-1`, `DP-2` and `HDMI-A-1`.
 - Workspaces 1–3 use Dwindle on `DP-1`; workspace 4 on `HDMI-A-1` and
   workspace 5 on `DP-2` use vertical scrolling. Workspace 7 also maps to
   `HDMI-A-1` with Dwindle.
 - The keyboard layout switches between `us` and `ru` with Caps Lock.
-- Autostart launches Kitty, Zen Browser and Mattermost Desktop. Mattermost
+- Desktop autostart launches Kitty, Zen Browser and Mattermost Desktop. Mattermost
   is not in the package lists; install it separately or remove its autostart entry.
 - Hypridle turns displays off after 60 seconds of inactivity and restores them
   on activity. It locks before sleep; there is no timed idle-lock listener.

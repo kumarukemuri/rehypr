@@ -1,15 +1,6 @@
-local function app(cmd)
-    hl.exec_cmd("uwsm app -- " .. cmd)
-end
-
+local profile = require("config.profile")
 hl.on("hyprland.start", function()
-    local user_apps = {
-        "kitty",
-        "zen-browser",
-        "mattermost-desktop",
-    }
-
-    for _, cmd in ipairs(user_apps) do
-        app(cmd)
+    for _, cmd in ipairs(profile.autostart) do
+        hl.exec_cmd("uwsm app -- " .. cmd)
     end
 end)

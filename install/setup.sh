@@ -35,10 +35,11 @@ readonly -a MATUGEN_OUTPUT_DIRS=(
 dry_run=false
 noconfirm=false
 action=""
+selected_profile=""
 
 usage() {
     cat <<'EOF'
-Usage: setup.sh [--install | --restow | --migrate] [options]
+Usage: setup.sh [--install | --restow | --migrate | --profile NAME] [options]
 
 Manage the rehypr desktop for the current user. Without an action, show a menu.
 
@@ -46,6 +47,7 @@ Actions:
   --install     Install packages and configure the desktop
   --restow      Refresh dotfile links only
   --migrate     Migrate legacy links and refresh dotfile links
+  --profile NAME  Save auto, desktop or laptop locally (no session restart)
 
 Options:
   --dry-run      Preview the selected action without changing the system
@@ -56,6 +58,12 @@ EOF
 
 while (($#)); do
     case "$1" in
+        --profile)
+            [[ -z "$action" && $# -ge 2 ]] || { printf 'Use --profile auto|desktop|laptop as a separate action.\n' >&2; exit 2; }
+            action=profile
+            selected_profile="$2"
+            shift
+            ;;
         --install | --restow | --migrate)
             [[ -z "$action" ]] || { printf 'Choose only one action.\n' >&2; exit 2; }
             action="${1#--}"
@@ -82,8 +90,8 @@ fi
 
 if [[ -z "$action" ]]; then
     while true; do
-        printf '\nrehypr\n  1) Install and configure desktop\n  2) Restow dotfiles\n  3) Migrate legacy links and restow\n  0) Exit\n'
-        printf 'Select action [0-3]: '
+        printf '\nrehypr\n  1) Install and configure desktop\n  2) Restow dotfiles\n  3) Migrate legacy links and restow\n  4) Choose device profile\n  0) Exit\n'
+        printf 'Select action [0-4]: '
         if ! IFS= read -r choice; then
             printf '\nNo action selected. Use --install, --restow or --migrate.\n' >&2
             exit 2
@@ -92,8 +100,14 @@ if [[ -z "$action" ]]; then
             1) action=install; break ;;
             2) action=restow; break ;;
             3) action=migrate; break ;;
+            4)
+                printf 'Profile [auto/desktop/laptop]: '
+                IFS= read -r selected_profile || exit 2
+                action=profile
+                break
+                ;;
             0) exit 0 ;;
-            *) printf 'Enter 0, 1, 2 or 3.\n' >&2 ;;
+            *) printf 'Enter 0, 1, 2, 3 or 4.\n' >&2 ;;
         esac
     done
 fi
@@ -102,6 +116,28 @@ if $noconfirm && [[ "$action" != install ]]; then
     printf '%s\n' '--noconfirm is only supported with --install.' >&2
     exit 2
 fi
+
+readonly PROFILE_FILE="$TARGET_HOME/.config/rehypr/profile"
+readonly PROFILE_HELPER="$REPO_DIR/dotfiles/hyprland/.config/hypr/scripts/profile.sh"
+if [[ "$action" == profile ]]; then
+    case "$selected_profile" in
+        auto | desktop | laptop) ;;
+        *) printf 'Invalid profile: %s\n' "$selected_profile" >&2; exit 2 ;;
+    esac
+    if $dry_run; then
+        printf 'Would save profile %s to %s\n' "$selected_profile" "$PROFILE_FILE"
+    else
+        mkdir -p -- "$(dirname -- "$PROFILE_FILE")"
+        profile_temp="$(mktemp "${PROFILE_FILE}.XXXXXX")"
+        printf '%s\n' "$selected_profile" > "$profile_temp"
+        mv -- "$profile_temp" "$PROFILE_FILE"
+        printf 'Profile saved: %s (effective: %s). Reload Hyprland to apply.\n' "$selected_profile" "$(bash "$PROFILE_HELPER")"
+    fi
+    exit 0
+fi
+# Validate local overrides without changing them during install/restow.
+effective_profile="$(bash "$PROFILE_HELPER")"
+printf 'Device profile: %s\n' "$effective_profile"
 
 ((${#STOW_PACKAGES[@]})) || { printf 'The Stow package list is empty.\n' >&2; exit 1; }
 for package in "${STOW_PACKAGES[@]}"; do
