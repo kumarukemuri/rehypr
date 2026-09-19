@@ -260,17 +260,6 @@ arrow or workspace indicator. The bar keeps its black background.
 
 ## Wallpapers and colors
 
-The local [Papirus fork](dotfiles/matugen/.config/matugen/papirus/README.md)
-contains monochrome interface icons with a `ColorScheme-Text` foreground.
-Matugen renders its deduplicated SVG templates with `primary` and selects
-`Rehypr-Papirus` for GTK and Qt. Default blue folders also use `primary`, with
-darker backs and symbols. Other colored artwork and status accents are preserved.
-All other icons inherit Papirus-Dark; symbolic icons follow the text color.
-Generated files live under `${XDG_DATA_HOME:-~/.local/share}/icons/Rehypr-Papirus`.
-An unchanged palette and template set skips rendering. No system icon scan or
-alias rebuild is needed for palette-only changes. Restart applications if they
-retain cached icons.
-
 The picker caches 360×204 previews (preserving aspect ratio) in
 `${XDG_CACHE_HOME:-~/.cache}/rehypr/wallpapers` using FFmpeg. The first launch
 generates thumbnails; later launches reuse them until the source file changes.
