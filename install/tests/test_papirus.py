@@ -16,10 +16,16 @@ with tempfile.TemporaryDirectory(prefix='rehypr-icons-test-') as td:
     root = Path(td)
     output = root / 'data/icons/Rehypr-Papirus'
     assert module['generate'](module['SOURCE'], output, '#123abc')
-    folder = output / '16x16/places/folder.svg'
-    assert 'color:#123abc' in folder.read_text()
-    assert (output / '48x48/places/folder.svg').is_symlink()
-    assert (output / '48x48/places/folder.svg').readlink() == Path(manifest['fallbacks']['48x48/places/folder.svg'])
+    folder = output / '16x16/places/folder-blue.svg'
+    assert '#123abc' in folder.read_text()
+    for size in (22, 24, 32, 48, 64):
+        for name in ('folder-blue', 'folder-blue-download', 'folder-blue-documents'):
+            svg = (output / f'{size}x{size}/places/{name}.svg').read_text()
+            assert '#123abc' in svg and '#0e2d93' in svg
+            assert '#5294e2' not in svg and '#e4e4e4' in svg
+            assert '@PRIMARY@' not in svg and '@DARK@' not in svg and '@EMBLEM@' not in svg
+    assert '#061442' in (output / '48x48/places/folder-blue-download.svg').read_text()
+    assert '48x48/places/folder-red.svg' not in manifest['icons']
     templates = set()
     alias = None
     for name, template in manifest['icons'].items():
@@ -37,7 +43,7 @@ with tempfile.TemporaryDirectory(prefix='rehypr-icons-test-') as td:
     assert module['generate'](module['SOURCE'], output, '#80d4dc')
     assert alias.lstat().st_ino == inode
     assert (output / 'index.theme').stat().st_mtime_ns == index_mtime
-    assert 'color:#80d4dc' in folder.read_text()
+    assert '#80d4dc' in folder.read_text()
     stamp = folder.stat().st_mtime_ns
     assert not module['generate'](module['SOURCE'], output, '#80d4dc')
     assert folder.stat().st_mtime_ns == stamp

@@ -70,5 +70,8 @@ dotfiles/themes/.local/share/themes/adw-gtk3/
 # Per-user files generated during setup or theme selection
 dotfiles/hyprland/.config/hypr/colors.conf
 dotfiles/hyprland/.config/hypr/config/colors.lua
+# Local Papirus render/cache artifacts; the vendored SVG templates remain tracked.
+dotfiles/matugen/.config/matugen/papirus/.generated/
+dotfiles/matugen/.config/matugen/papirus/.fingerprint
 qtct/.config/qt5ct/qt5ct.conf
 qtct/.config/qt6ct/qt6ct.conf

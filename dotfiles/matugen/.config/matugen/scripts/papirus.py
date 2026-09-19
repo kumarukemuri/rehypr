@@ -22,7 +22,12 @@ def generate(source, destination, primary):
     manifest_bytes = (source / 'manifest.json').read_bytes()
     manifest = json.loads(manifest_bytes)
     templates = {name: (source / name).read_text() for name in sorted(set(manifest['icons'].values()))}
-    fingerprint = hashlib.sha256(manifest_bytes + primary.encode() + json.dumps(templates, sort_keys=True).encode() + b'render-v1').hexdigest()
+    fingerprint = hashlib.sha256(manifest_bytes + primary.encode() + json.dumps(templates, sort_keys=True).encode() + b'render-v2').hexdigest()
+    rgb = [int(primary[i:i + 2], 16) for i in (1, 3, 5)]
+    def shade(factor):
+        return '#' + ''.join(f'{round(channel * factor):02x}' for channel in rgb)
+    def render(template):
+        return templates[template].replace('@PRIMARY@', primary).replace('@DARK@', shade(.78)).replace('@EMBLEM@', shade(.35))
     layout = hashlib.sha256(manifest_bytes).hexdigest()
     canonical = {}
     for output, template in manifest['icons'].items():
@@ -42,7 +47,7 @@ def generate(source, destination, primary):
             for template, output in canonical.items():
                 target = destination / output
                 temporary = target.with_name('.' + target.name + '.tmp')
-                temporary.write_text(templates[template].replace('@PRIMARY@', primary))
+                temporary.write_text(render(template))
                 temporary.replace(target)
             refresh_cache(destination)
             stamp.write_text(fingerprint)
@@ -57,7 +62,7 @@ def generate(source, destination, primary):
                 if template in rendered:
                     target.symlink_to(os.path.relpath(rendered[template], target.parent))
                     continue
-                svg = templates[template].replace('@PRIMARY@', primary)
+                svg = render(template)
                 target.write_text(svg)
                 rendered[template] = target
             for output, original in manifest.get('fallbacks', {}).items():
