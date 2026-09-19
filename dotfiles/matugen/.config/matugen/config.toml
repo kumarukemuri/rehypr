@@ -1,6 +1,11 @@
 [config]
 # ...
 
+[templates.papirus]
+input_path = '~/.config/matugen/templates/papirus-primary'
+output_path = '~/.cache/rehypr/papirus-primary'
+post_hook = 'python3 "$HOME/.config/matugen/scripts/papirus.py" "$HOME/.cache/rehypr/papirus-primary" --activate'
+
 [templates.hyprland]
 input_path  = "~/.config/matugen/templates/hyprland-colors.lua"
 output_path = "~/.config/hypr/config/colors.lua"

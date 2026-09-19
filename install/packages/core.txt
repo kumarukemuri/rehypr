@@ -16,6 +16,7 @@ xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 
 # Desktop
+ffmpeg
 fish
 keyd
 kitty

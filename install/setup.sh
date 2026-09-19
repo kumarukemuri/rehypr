@@ -272,6 +272,7 @@ Post-install actions:
   enable and start audio user units: ${AUDIO_USER_UNITS[*]}
   enable user services: ${USER_SERVICES[*]}
   create or update Qt color paths while preserving existing settings
+  set GTK and Qt interface fonts to JetBrainsMono Nerd Font Propo 12
   create Matugen output directories
   initialize missing theme colors and wallpaper paths without reloading the desktop
   leave optional Kraken and replay services disabled unless already enabled
@@ -358,6 +359,42 @@ for qt_version in 5 6; do
         exit 1
     fi
 done
+
+# Match the Waybar interface font; keep all other GTK/Qt settings.
+python3 - "$TARGET_HOME" <<'PYFONT'
+import configparser
+from pathlib import Path
+import sys
+
+config = Path(sys.argv[1]) / '.config'
+for version in (3, 4, 5, 6):
+    gtk = version < 5
+    path = config / (f'gtk-{version}.0/settings.ini' if gtk else f'qt{version}ct/qt{version}ct.conf')
+    settings = configparser.ConfigParser(interpolation=None, strict=False)
+    settings.optionxform = str
+    settings.read(path)
+    section, key = ('Settings', 'gtk-font-name') if gtk else ('Fonts', 'general')
+    if not settings.has_section(section):
+        settings.add_section(section)
+    if gtk:
+        value = 'JetBrainsMono Nerd Font Propo 12'
+    else:
+        parts = settings.get(section, key, fallback='"Sans,12,-1,5,50,0,0,0,0,0"').strip('"').split(',')
+        parts[:2] = ['JetBrainsMono Nerd Font Propo', '12']
+        value = '"' + ','.join(parts) + '"'
+    settings.set(section, key, value)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('w') as stream:
+        settings.write(stream, space_around_delimiters=False)
+PYFONT
+
+if [[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]] && command -v gsettings >/dev/null 2>&1; then
+    for schema in org.gnome.desktop.interface org.cinnamon.desktop.interface; do
+        if gsettings list-schemas | grep -Fx "$schema" >/dev/null; then
+            gsettings set "$schema" font-name 'JetBrainsMono Nerd Font Propo 12'
+        fi
+    done
+fi
 
 # Generated colors are not tracked, so a fresh checkout needs an initial palette.
 if [[ ! -f "$TARGET_HOME/.config/hypr/colors.conf" ||

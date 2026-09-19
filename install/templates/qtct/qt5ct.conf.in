@@ -7,7 +7,7 @@ style=Fusion
 
 [Fonts]
 fixed="Noto Sans,12,-1,5,50,0,0,0,0,0"
-general="Roboto Flex,14,-1,5,50,0,0,0,0,0"
+general="JetBrainsMono Nerd Font Propo,12,-1,5,50,0,0,0,0,0"
 
 [Interface]
 activate_item_on_single_click=1

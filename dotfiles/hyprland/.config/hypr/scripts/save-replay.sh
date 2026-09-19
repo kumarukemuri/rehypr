@@ -6,8 +6,9 @@ if [[ "$profile" != desktop ]]; then
     notify-send 'Replay unavailable' 'The replay service is configured for the desktop monitor.'
     exit 1
 fi
-if [[ ! -x "$HOME/.local/bin/save-gsr-replay" ]]; then
-    notify-send 'Replay unavailable' 'Install ~/.local/bin/save-gsr-replay first.'
+if systemctl --user kill --kill-whom=main --signal=SIGUSR1 gpu-screen-recorder-replay.service; then
+    notify-send -t 1800 -u low 'GPU Screen Recorder' 'Saving the last 30 seconds'
+else
+    notify-send -t 2500 -u critical 'GPU Screen Recorder' 'Replay service is not running'
     exit 1
 fi
-exec "$HOME/.local/bin/save-gsr-replay"

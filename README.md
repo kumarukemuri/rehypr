@@ -189,7 +189,7 @@ liquidctl --match "Kraken X" status
 ### GPU Screen Recorder replay
 
 The bundled [replay service](dotfiles/hyprland/.config/systemd/user/gpu-screen-recorder-replay.service)
-records `DP-1` at 60 FPS with a 120-second RAM buffer, HEVC video and Opus
+records `DP-1` at 60 FPS with a 30-second RAM buffer, HEVC video and Opus
 audio, saving MP4 clips to `~/Videos/Replays`. Its audio filter excludes
 Discord, Vesktop, Telegram, Zen, Spotify, Mattermost and Steam.
 
@@ -204,11 +204,13 @@ systemctl --user enable --now gpu-screen-recorder-replay.service
 systemctl --user status gpu-screen-recorder-replay.service
 ```
 
-`Super + R` first checks the device profile, then calls
-`~/.local/bin/save-gsr-replay` on desktop. That external helper is not included;
-provide it before using the shortcut. On laptop the shortcut reports that replay
-is unavailable.
-The keybinding comment still mentions 30 seconds; the service configures 120.
+`Super + R` saves the last 30 seconds on desktop by signaling only the replay
+service. On laptop the shortcut reports that replay is unavailable.
+
+`Super + Shift + R` starts manual recording of the focused monitor; press it
+again to stop and save the MP4 in `~/Videos/Recordings`. Manual recording uses
+a separate service with the same video and audio settings as replay and works
+on either profile. The service is started only by the shortcut, not at login.
 
 ## Keybindings
 
@@ -235,7 +237,8 @@ acts as `Super`, and physical left Super acts as `Alt`.
 | `Super + Q/E` | Focus workspace 4/5 |
 | `Super + Shift + workspace key` | Move a window to that workspace |
 | `Super + Tab` | Focus the next monitor |
-| `Super + R` | Run the external replay-save helper (see above) |
+| `Super + R` | Save the last 30 seconds of replay (desktop) |
+| `Super + Shift + R` | Start/stop manual recording of the focused monitor |
 | `Print` | Screenshot the focused monitor |
 | `Ctrl + Print` | Screenshot the active window |
 | `Alt + Shift + S` | Screenshot a selected area |
@@ -256,6 +259,21 @@ idle inhibitor. The drawer uses a 400 ms animation; there is no separate tray
 arrow or workspace indicator. The bar keeps its black background.
 
 ## Wallpapers and colors
+
+The local [Papirus fork](dotfiles/matugen/.config/matugen/papirus/README.md)
+contains monochrome interface icons with a `ColorScheme-Text` foreground.
+Matugen renders its deduplicated SVG templates with `primary` and selects
+`Rehypr-Papirus` for GTK and Qt. Colored artwork and status accents are preserved.
+All other icons inherit Papirus-Dark; symbolic icons follow the text color.
+Generated files live under `${XDG_DATA_HOME:-~/.local/share}/icons/Rehypr-Papirus`.
+An unchanged palette and template set skips rendering. No system icon scan or
+alias rebuild is needed for palette-only changes. Restart applications if they
+retain cached icons.
+
+The picker caches 360×204 previews (preserving aspect ratio) in
+`${XDG_CACHE_HOME:-~/.cache}/rehypr/wallpapers` using FFmpeg. The first launch
+generates thumbnails; later launches reuse them until the source file changes.
+Wallpaper selection always uses the full-resolution original.
 
 Press `Super + Shift + P` to choose an image from
 `~/.config/hypr/wallpapers`.

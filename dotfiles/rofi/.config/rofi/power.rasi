@@ -1,7 +1,7 @@
 @import "./colors.rasi"
 
 * {
-    font: "Roboto 14";
+    font: "JetBrainsMono Nerd Font Propo 12";
 
     selected:               @primary;
     foreground:             @on-surface;
@@ -19,7 +19,7 @@ window {
     location: center;
     anchor: center;
     width: 150px;
-    border-radius: 12px;
+    border-radius: 0px;
     background-color: @background;
 }
 
@@ -30,7 +30,7 @@ mainbox {
     margin:                      0px;
     padding:                     10px;
     border:                      0px solid;
-    border-radius:               0px 0px 0px 0px;
+    border-radius:               0px;
     border-color:                @selected;
     background-color:            @background;
     children:                    [ "listview" ];
@@ -57,7 +57,7 @@ element {
     margin:                      0px;
     padding:                     5px;
     border:                      0px solid;
-    border-radius:               12px;
+    border-radius:               0px;
     border-color:                @selected;
     background-color:            @background;
     text-color:                  @foreground;

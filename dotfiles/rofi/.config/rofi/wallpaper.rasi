@@ -1,7 +1,7 @@
 @import "./colors.rasi"
 
 * {
-    font: "Roboto 14";
+    font: "JetBrainsMono Nerd Font Propo 12";
     text-color: @on-surface;
     background-color: @background;
 }
@@ -11,21 +11,21 @@ window {
     anchor: center;
     width: 1200px;
     border: 0px;
-    border-radius: 16px;
+    border-radius: 0px;
     background-color: @background;
 }
 
 mainbox {
-    spacing: 12px;
-    padding: 12px;
+    spacing: 6px;
+    padding: 8px;
     background-color: @background;
     children: [ "inputbar", "listview" ];
 }
 
 inputbar {
-    spacing: 10px;
-    padding: 12px 16px;
-    border-radius: 12px;
+    spacing: 6px;
+    padding: 8px 10px;
+    border-radius: 0px;
     background-color: @primary;
     text-color: @on-primary;
     children: [ "prompt", "entry" ];
@@ -48,17 +48,18 @@ listview {
     lines: 3;
     fixed-height: false;
     dynamic: true;
-    fixed-columns: false;
-    spacing: 10px;
+    fixed-columns: true;
+    flow: horizontal;
+    spacing: 6px;
     scrollbar: false;
     background-color: @background;
 }
 
 element {
     orientation: vertical;
-    spacing: 8px;
-    padding: 8px;
-    border-radius: 12px;
+    spacing: 4px;
+    padding: 4px;
+    border-radius: 0px;
     background-color: @background;
     text-color: @on-surface;
 }
@@ -69,7 +70,10 @@ element selected.normal {
 }
 
 element-icon {
-    size: 170px;
+    size: 180px;
+    squared: false;
+    width: 180px;
+    height: 102px;
     background-color: transparent;
     horizontal-align: 0.5;
     vertical-align: 0.5;

@@ -115,7 +115,7 @@ rule({
     tag = "+explorer",
     float = true,
     center = true,
-    size = { 800, 600 },
+    size = { 1200, 800 },
 })
 
 -- Popups

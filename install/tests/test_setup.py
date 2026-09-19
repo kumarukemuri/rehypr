@@ -7,7 +7,7 @@ with tempfile.TemporaryDirectory(prefix='setup-layout-') as td:
  packages=[]
  for name in ['core','aur']:packages += [s for s in (r/f'install/packages/{name}.txt').read_text().splitlines() if s and not s.startswith('#')]
  (b/'packages').write_text('\n'.join(packages)+'\n')
- for name,body in {'pacman':'cat "$TEST_PACKAGES"','sudo':'exit 0','yay':'exit 0','systemctl':'exit 0','xdg-user-dirs-update':'exit 0'}.items():
+ for name,body in {'pacman':'cat "$TEST_PACKAGES"','sudo':'exit 0','yay':'exit 0','systemctl':'exit 0','gsettings':'exit 0','xdg-user-dirs-update':'exit 0'}.items():
   p=bin/name;p.write_text('#!/bin/sh\n'+body+'\n');p.chmod(0o755)
  for p in [r/'dotfiles/hyprland/.config/hypr/colors.conf',r/'dotfiles/hyprland/.config/hypr/config/colors.lua']:p.unlink()
  env=dict(os.environ,HOME=str(home),XDG_CONFIG_HOME=str(home/'.config'),PATH=str(bin)+':'+os.environ['PATH'],TEST_PACKAGES=str(b/'packages'))

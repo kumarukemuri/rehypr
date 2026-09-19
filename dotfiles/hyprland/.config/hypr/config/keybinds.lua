@@ -55,6 +55,9 @@ bind(altMod .. " + SHIFT + S", screencutter("area"))
 -- Instant replay: save the last 30 seconds from GPU Screen Recorder.
 bind(mainMod .. " + R", exec("bash " .. scriptDir .. "/save-replay.sh"))
 
+-- Manual recording: press again to stop and save.
+bind(mainMod .. " + SHIFT + R", exec("bash " .. scriptDir .. "/record.sh"))
+
 -- Window management ==========================================
 hl.bind(mainMod .. " + V", function()
     local win = hl.get_active_window()
