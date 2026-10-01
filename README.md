@@ -1,5 +1,7 @@
 # rehypr
 
+<img width="3440" height="1440" alt="image" src="https://github.com/user-attachments/assets/0a37c18f-8572-4b06-86cb-6ff5935926bb" />
+
 Personal Hyprland dotfiles for Arch Linux.
 
 The setup uses Lua-based Hyprland configuration, GNU Stow, UWSM and a shared
