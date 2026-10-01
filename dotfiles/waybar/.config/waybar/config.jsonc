@@ -1,0 +1,74 @@
+{
+  "layer": "top",
+  "output": ["eDP-1", "DP-1"],
+  "margin-top": 0,
+  "spacing": 6,
+  "modules-center": ["group/clockmenu"],
+  "group/clockmenu": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 400,
+      "transition-left-to-right": false,
+      "click-to-reveal": true,
+    },
+    "modules": ["clock", "group/controls"],
+  },
+  "group/controls": {
+    "orientation": "horizontal",
+    "modules": ["network", "bluetooth", "battery", "wireplumber", "idle_inhibitor", "tray"],
+  },
+  "clock": {
+    "format": "{:%I:%M %p}",
+    "tooltip-format": "{:%A, %B %d, %Y}",
+  },
+  "wireplumber": {
+    "format": "{icon}",
+    "format-muted": "",
+    "format-icons": ["", "󰪞", "󰪟", "󰪠", "󰪡", "󰪢", "󰪣", "󰪤", "󰪥"],
+    "tooltip-format": "{node_name} @ {volume}%",
+  },
+  "battery": {
+    "format": "{icon} {capacity} %",
+    "format-charging": "󰂄 {capacity} %",
+    "format-icons": ["󰂃", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "states": {
+      "critical": 10,
+    },
+    "interval": 2,
+    "tooltip": true,
+    "tooltip-format": "{time} remaining",
+  },
+  "network": {
+    "format-wifi": "",
+    "format-ethernet": "󰖟",
+    "format-disconnected": "󰕑",
+    "tooltip-format-wifi": " {essid} - ({signalStrength}%)",
+    "tooltip-format-ethernet": "󰈀 {ifname} > {ipaddr}",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 50,
+  },
+  "bluetooth": {
+    "format": "",
+    "format-connected": "󰂱",
+    "format-connected-battery": "󰂱",
+    "tooltip-format": "{num_connections} connected",
+    "tooltip-format-connected": "{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+    "on-click-middle": "~/.config/waybar/scripts/bt-disconnect.sh",
+    "interval": 2,
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "tooltip-format": "Caffeine {status}",
+    "format-icons": {
+      "activated": "󰅶",
+      "deactivated": "󰛊",
+    },
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 16,
+    "show-passive-items": false,
+  },
+}

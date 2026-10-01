@@ -1,0 +1,37 @@
+@import url(colors.css);
+
+window#osd {
+    font-size: 14px;
+    border-radius: 16px;
+    background: @surface;
+}
+
+window#osd #container {
+    margin: 6px 10px;
+    spacing: 8px;
+}
+
+window#osd image,
+window#osd label {
+    padding: 0;
+    margin-right: 2px;
+    color: @primary;
+    -gtk-icon-transform: scale(0.6);
+}
+
+window#osd progressbar {
+    min-height: 10px;
+    padding: 0;
+    border-radius: 8px;
+    background: transparent;
+}
+
+window#osd trough {
+    border-radius: 8px;
+    background: @surface_container_lowest;
+}
+
+window#osd progress {
+    border-radius: 8px;
+    background: @primary;
+}

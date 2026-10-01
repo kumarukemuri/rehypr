@@ -1,0 +1,99 @@
+@import url("colors.css");
+
+* {
+    all: unset;
+    font-family: "JetBrains Mono Regular", "JetBrainsMono Nerd Font Propo";
+    font-size: 16px;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: #000000;
+}
+
+/* Outer center container */
+.modules-center {
+    color: @on_background;
+    background-color: transparent;
+    border-radius: 0;
+    padding: 4px 8px;
+}
+
+/* Equal icon cells, including each individual tray item. */
+#network,
+#bluetooth,
+#wireplumber,
+#idle_inhibitor {
+    min-width: 18px;
+    padding: 0px 6px;
+    margin: 0px;
+    color: @on_background;
+    background: transparent;
+}
+
+#tray {
+    padding: 0px 6px;
+    margin: 0px;
+    background: transparent;
+}
+
+#tray > widget {
+    min-width: 18px;
+    padding: 0px;
+    margin: 0px;
+}
+
+/* Always-visible clock */
+#clock {
+    font-weight: 600;
+    color: alpha(@primary, 0.9);
+    padding: 0px 6px;
+    margin: 2px 0px;
+}
+
+#battery {
+    font-weight: 400;
+    color: alpha(@primary, 0.9);
+    padding: 0px 6px;
+    margin: 2px 0px;
+}
+
+/* One hidden group: its spacing collapses with the drawer. */
+#clockmenu,
+#controls {
+    padding: 0px;
+    margin: 0px;
+    background: transparent;
+}
+
+/* Tray menu */
+#tray menu {
+    padding: 6px;
+    background-color: @background;
+    box-shadow: none;
+    border-radius: 12px;
+}
+
+#tray menu menuitem {
+    padding: 6px;
+}
+
+#tray menu menuitem:hover {
+    border-radius: 8px;
+    background-color: @primary;
+}
+
+#tray menu menuitem:hover label {
+    color: @outline_variant;
+}
+
+/* Tooltip */
+tooltip,
+tooltip label {
+    border: none;
+    border-radius: 8px;
+    padding: 6px;
+    margin: 2px;
+    color: @on_background;
+    background: @background;
+}

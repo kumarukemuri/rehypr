@@ -1,0 +1,86 @@
+# Generated theme colors
+dotfiles/themes/.local/share/themes/adw-gtk3/gtk-3.0/colors.css
+dotfiles/themes/.local/share/themes/adw-gtk3/gtk-4.0/colors.css
+dotfiles/themes/.local/share/themes/adw-gtk3-dark/gtk-3.0/colors.css
+dotfiles/themes/.local/share/themes/adw-gtk3-dark/gtk-4.0/colors.css
+
+dotfiles/kitty/.config/kitty/colors.conf
+dotfiles/mako/.config/mako/mako-colors
+dotfiles/rofi/.config/rofi/colors.rasi
+dotfiles/swayosd/.config/swayosd/colors.css
+dotfiles/waybar/.config/waybar/colors.css
+
+# Runtime symlinks created by systemctl --user enable
+dotfiles/hyprland/.config/systemd/user/*.target.wants/
+
+# Environment files
+.env
+.env.*
+.env.local
+.env.production
+.env.development
+.env.staging
+*.env
+
+# Credentials & secrets
+credentials.json
+service-account-*.json
+*-keys.json
+secrets.yaml
+secrets.yml
+secrets.json
+vault/*
+*.p12
+*.jks
+*.keystore
+id_ed25519*
+id_rsa*
+ssh_host_*_key
+authorized_keys
+known_hosts
+
+# Token files
+.token
+tokens.txt
+auth.json
+aws-credentials
+.env.secrets
+
+# Terraform state (may contain secrets)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!variables.tfvars
+
+# Docker/compose overrides with secrets
+docker-compose.override.yml
+docker-compose.local.yml
+
+# IDE & editor secrets
+.vscode/*.secret*
+.idea/*credentials*
+
+# OS-generated files (often contain sensitive data)
+.DS_Store
+Thumbs.db
+Desktop.ini
+dotfiles/themes/.local/share/themes/adw-gtk3/
+
+# Per-user files generated during setup or theme selection
+dotfiles/hyprland/.config/hypr/colors.conf
+dotfiles/hyprland/.config/hypr/config/colors.lua
+# Local Papirus render/cache artifacts; the vendored SVG templates remain tracked.
+dotfiles/matugen/.config/matugen/papirus/.generated/
+dotfiles/matugen/.config/matugen/papirus/.fingerprint
+qtct/.config/qt5ct/qt5ct.conf
+qtct/.config/qt6ct/qt6ct.conf
+
+# Local shell state, service activation and private application credentials
+**/fish_variables
+**/fish_history
+dotfiles/hyprland/.config/systemd/user/*.service.wants/
+dotfiles/hyprland/.config/systemd/user/*.socket.wants/
+**/.ssh/
+**/.aws/
+**/.config/stoat-radio/

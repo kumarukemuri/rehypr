@@ -1,0 +1,12 @@
+[Unit]
+Description=GPU Screen Recorder manual recording
+PartOf=graphical-session.target
+After=graphical-session.target pipewire.service wireplumber.service
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/bash %h/.config/hypr/scripts/record.sh --run
+KillSignal=SIGINT
+TimeoutStopSec=60s
+Slice=background-graphical.slice
