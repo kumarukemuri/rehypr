@@ -17,7 +17,7 @@ hl.config({
         border_size = 0,
         resize_on_border = true,
         allow_tearing = false,
-    },1
+    },
 
     misc = {
         disable_hyprland_logo      = true,
