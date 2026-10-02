@@ -79,10 +79,10 @@ bind(
 )
 
 -- Workspace navigation =======================================
-local workspaces_left = { { key = "Q", id = 4 }, { key = "E", id = 5 } }
-local workspaces_right = { { key = "1", id = 1 }, { key = "2", id = 2 }, { key = "3", id = 3 } }
+-- local workspaces_left = { { key = "Q", id = 4 }, { key = "E", id = 5 } }
+local workspaces_main = { { key = "1", id = 1 }, { key = "2", id = 2 }, { key = "3", id = 3 } }
 
-for _, group in ipairs({ workspaces_left, workspaces_right }) do
+for _, group in ipairs({ workspaces_main }) do
     for _, ws in ipairs(group) do
         bind(mainMod .. " + " .. ws.key, hl.dsp.focus({ workspace = ws.id }))
         bind(mainMod .. " + SHIFT + " .. ws.key, hl.dsp.window.move({ workspace = ws.id }))
@@ -93,10 +93,12 @@ bind(mainMod .. " + W", hl.dsp.focus({ direction = "u" }))
 bind(mainMod .. " + S", hl.dsp.focus({ direction = "d" }))
 bind(mainMod .. " + D", hl.dsp.focus({ direction = "r" }))
 bind(mainMod .. " + A", hl.dsp.focus({ direction = "l" }))
-bind(mainMod .. " + SHIFT + W", hl.dsp.window.swap({ direction = "u" }))
-bind(mainMod .. " + SHIFT + S", hl.dsp.window.swap({ direction = "d" }))
-bind(mainMod .. " + SHIFT + D", hl.dsp.window.move({ monitor = "r" }))
-bind(mainMod .. " + SHIFT + A", hl.dsp.window.move({ monitor = "l" }))
+bind(mainMod .. " + E", hl.dsp.focus({ monitor = "r" }))
+bind(mainMod .. " + Q", hl.dsp.focus({ monitor = "l" }))
+bind(mainMod .. " + SHIFT + W", hl.dsp.window.move({ direction = "u" }))
+bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ direction = "d" }))
+bind(mainMod .. " + SHIFT + D", hl.dsp.window.move({ direction = "r" }))
+bind(mainMod .. " + SHIFT + A", hl.dsp.window.move({ direction = "l" }))
 
 bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })

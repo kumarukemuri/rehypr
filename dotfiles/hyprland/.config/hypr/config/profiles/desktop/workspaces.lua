@@ -21,22 +21,16 @@ return function(outputs)
     for _, id in ipairs({ 5 }) do
         rule({
             workspace = tostring(id),
-            monitor = outputs.right,
-            layout = "scrolling",
-            layout_opts = {
-                direction = "up",
-            },
+            monitor = outputs.down,
+            layout = "dwindle",
         })
     end
 
     for _, id in ipairs({ 4 }) do
         rule({
             workspace = tostring(id),
-            monitor = outputs.left,
-            layout = "scrolling",
-            layout_opts = {
-                direction = "up",
-            },
+            monitor = outputs.up,
+            layout = "dwindle",
         })
     end
 

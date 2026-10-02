@@ -1,1 +1,1 @@
-return { "kitty", "zen-browser", "zeditor", "Telegram", "mattermost-desktop" }
+return { "kitty", "zen-browser", "obsidian", "Telegram", "mattermost-desktop" }

@@ -148,10 +148,10 @@ rule({
 
 rule({
     match = {
-        initial_class = "^(obsidian)$",
+        initial_class = "^(md.obsidian.Obsidian)$",
     },
     tag = "+note",
-    workspace = "4",
+    workspace = "2",
 })
 
 -- org.pulseaudio.pavucontrol

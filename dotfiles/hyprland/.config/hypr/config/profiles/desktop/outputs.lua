@@ -1,1 +1,1 @@
-return { main = "DP-1", left = "HDMI-A-1", right = "DP-2" }
+return { main = "DP-1", down = "HDMI-A-1", up = "DP-2" }

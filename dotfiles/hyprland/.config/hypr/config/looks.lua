@@ -6,22 +6,19 @@ hl.config({
     xwayland = {
         force_zero_scaling = true,
     },
+
     debug = {
         suppress_errors = false,
     },
+
     general = {
         gaps_in = 0,
         gaps_out = 0,
         border_size = 0,
-
-        -- col = {
-        --     active_border = C.outline_variant,
-        --     inactive_border = C.background,
-        -- },
-
         resize_on_border = true,
         allow_tearing = false,
-    },
+    },1
+
     misc = {
         disable_hyprland_logo      = true,
         force_default_wallpaper    = 0,
