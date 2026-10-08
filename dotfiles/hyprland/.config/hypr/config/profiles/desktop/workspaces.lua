@@ -7,7 +7,7 @@ return function(outputs)
 
     -- Primary display
 
-    for _, id in ipairs({ 1, 2, 3, }) do
+    for _, id in ipairs({ 1, 2, 3 }) do
         rule({
             workspace = tostring(id),
             monitor = outputs.main,
@@ -15,14 +15,11 @@ return function(outputs)
         })
     end
 
-    -- Secondary display
-
-
-    for _, id in ipairs({ 5 }) do
+    for _, id in ipairs({6}) do
         rule({
             workspace = tostring(id),
-            monitor = outputs.down,
-            layout = "dwindle",
+            monitor = outputs.main,
+            layout = "master",
         })
     end
 
@@ -33,6 +30,16 @@ return function(outputs)
             layout = "dwindle",
         })
     end
+
+    for _, id in ipairs({ 5 }) do
+        rule({
+            workspace = tostring(id),
+            monitor = outputs.down,
+            layout = "dwindle",
+        })
+    end
+
+
 
 
     -- TV

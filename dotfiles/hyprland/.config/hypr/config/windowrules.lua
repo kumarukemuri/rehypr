@@ -1,9 +1,24 @@
-local rule = hl.window_rule
+-- Apply geometry in the same rule that makes a window floating: float matching
+-- alone can run before that rule's initial floating state has been applied.
+local function rule(config)
+    if config.float == true then
+        config.center = true
+        config.size = { 1400, 1000 }
+    end
+    return hl.window_rule(config)
+end
+
+-- Windows that are already floating by default (dialogs, utility windows).
+rule({
+    match = { float = true },
+    center = true,
+    size = { 1400, 1000 },
+})
 
 -- Browsers
 rule({
     match = {
-        initial_class = "^(firefox|brave-browser|librewolf|zen)$",
+        initial_class = "^(zen|chromium)$",
     },
     tag = "+browser",
     workspace = "1",
@@ -25,7 +40,6 @@ rule({
         initial_class = "^(org.telegram.desktop)$",
     },
     tag = "+tg_media_viewer",
-    opacity = "1",
     float = true,
 })
 
@@ -64,7 +78,7 @@ rule({
         initial_class = "Spotify",
     },
     tag = "+Spotify",
-    workspace = "4",
+    workspace = "5",
 })
 
 -- MPV
@@ -79,22 +93,22 @@ rule({
 -- Games
 rule({
     match = {
-        initial_class = "^(steam_app_.*|gamescope)$",
+        class = "(?i)^(steam_app_[0-9]+)$",
     },
-    workspace = "3",
-    fullscreen = true,
-    float = true,
-    center = true,
+    workspace = "6",
     idle_inhibit = "always",
+    float = true,
+    no_initial_focus = true,
 })
 
 -- Steam
 rule({
     match = {
-        initial_class = "^steam$",
+        class = "steam",
+        initial_class = "steam",
     },
     workspace = "3",
-    tag = "+steam",
+    tag = "+steam"
 })
 
 -- Terminal tools
@@ -114,8 +128,6 @@ rule({
     },
     tag = "+explorer",
     float = true,
-    center = true,
-    size = { 1200, 800 },
 })
 
 -- Popups
@@ -126,12 +138,10 @@ rule({
     },
     tag = "+popup",
     float = true,
-    center = true,
     pin = true,
-    size = { 800, 600 },
 })
 
--- Polkit authentication
+-- Polkit
 
 rule({
     match = {
@@ -139,7 +149,6 @@ rule({
     },
     tag = "+polkit",
     float = true,
-    center = true,
     pin = true,
 })
 
@@ -152,37 +161,4 @@ rule({
     },
     tag = "+note",
     workspace = "2",
-})
-
--- org.pulseaudio.pavucontrol
-
-rule({
-    match = {
-        initial_class = "^(org.pulseaudio.pavucontrol)$",
-    },
-    tag = "+pavucontrol",
-    workspace = "special:shell",
-})
-
--- Match the window pop-in style for all Rofi menus.
-hl.layer_rule({
-    match = { namespace = "^rofi$" },
-    animation = "popin 60%",
-})
-
--- GSR
-
--- hl.layer_rule({
---     match = {
---         namespace = "^gsr-(notify|ui)$",
---     },
-
---     no_anim = true,
--- })
-
--- Opacity for fullscreen windows
-
-hl.window_rule({
-    match = { fullscreen = true },
-    opacity = "1.0 override 1.0 override 1.0 override",
 })

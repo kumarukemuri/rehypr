@@ -59,19 +59,19 @@ bind(mainMod .. " + R", exec("bash " .. scriptDir .. "/save-replay.sh"))
 bind(mainMod .. " + SHIFT + R", exec("bash " .. scriptDir .. "/record.sh"))
 
 -- Window management ==========================================
-hl.bind(mainMod .. " + V", function()
-    local win = hl.get_active_window()
-    if not win then return end
-    if win.floating then
-        hl.dispatch(hl.dsp.window.float({ action = "off" }))
-    else
-        hl.dispatch(hl.dsp.window.float({ action = "on" }))
-        hl.timer(function()
-            hl.dispatch(hl.dsp.window.resize({ x = 1400, y = 1000 }))
-            hl.dispatch(hl.dsp.window.center())
-        end, { timeout = 20, type = "oneshot" })
-    end
-end)
+-- hl.bind(mainMod .. " + V", function()
+--     local win = hl.get_active_window()
+--     if not win then return end
+--     if win.floating then
+--         hl.dispatch(hl.dsp.window.float({ action = "off" }))
+--     else
+--         hl.dispatch(hl.dsp.window.float({ action = "on" }))
+--         hl.timer(function()
+--             hl.dispatch(hl.dsp.window.resize({ x = 1400, y = 1000 }))
+--             hl.dispatch(hl.dsp.window.center())
+--         end, { timeout = 20, type = "oneshot" })
+--     end
+-- end)
 
 bind(
     mainMod .. " + Tab",
@@ -83,6 +83,15 @@ bind(
 local workspaces_main = { { key = "1", id = 1 }, { key = "2", id = 2 }, { key = "3", id = 3 } }
 
 for _, group in ipairs({ workspaces_main }) do
+    for _, ws in ipairs(group) do
+        bind(mainMod .. " + " .. ws.key, hl.dsp.focus({ workspace = ws.id }))
+        bind(mainMod .. " + SHIFT + " .. ws.key, hl.dsp.window.move({ workspace = ws.id }))
+    end
+end
+
+local game = { { key = "GRAVE", id = 6 }}
+
+for _, group in ipairs({ game }) do
     for _, ws in ipairs(group) do
         bind(mainMod .. " + " .. ws.key, hl.dsp.focus({ workspace = ws.id }))
         bind(mainMod .. " + SHIFT + " .. ws.key, hl.dsp.window.move({ workspace = ws.id }))

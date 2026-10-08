@@ -148,7 +148,7 @@ choosing a profile. Reload Hyprland after changing it; application autostart run
 only at session startup.
 
 - **Desktop:** keeps the three-monitor layout, workspace assignments and startup
-  of Kitty, Zen, Zed, Telegram and Mattermost. Mouse-specific settings apply here.
+  of Kitty, Zen, Obsidian, Telegram and Mattermost. Mouse-specific settings apply here.
 - **Laptop:** `eDP-1` uses its preferred mode, scale 2, position `0x0` and 8-bit
   color. Hyprland calls automatic mode selection `preferred`, not `auto`.
   Workspaces 1–6 use Dwindle on the panel. Only session services start;
@@ -160,7 +160,7 @@ only at session startup.
   They are arranged to the right of the panel in output-name order, using logical
   panel dimensions. Connecting screens does not change the profile or launch apps.
   Workspaces from disconnected external screens are moved back to the panel.
-- Waybar remains enabled on `eDP-1` and `DP-1`. Wallpapers apply to active outputs;
+- Waybar remains enabled on `eDP-1` and `DP-2`. Wallpapers apply to active outputs;
   Hyprpaper also uses the current `$image` for newly connected outputs.
 - DDC brightness groups and the replay shortcut are desktop-only. Kraken and replay
   services remain opt-in and are not enabled by profile selection.
@@ -253,16 +253,15 @@ acts as `Super`, and physical left Super acts as `Alt`.
 | `Super + F` | Toggle fullscreen |
 | `Super + V` | Toggle floating mode |
 | `Super + W/A/S/D` | Focus a window by direction |
-| `Super + Shift + W/S` | Swap a window up/down |
-| `Super + Shift + A/D` | Move the window to the left/right monitor |
+| `Super + Shift + W/A/S/D` | Move the active window up/left/down/right |
 | `Super + Delete` | Open the power menu |
 | `Super + Shift + Delete` | Reload Hyprland and desktop services |
 | `Super + Shift + L` | Lock with Hyprlock |
 | `Super + Shift + P` | Choose a wallpaper |
 | `Super + Shift + C` | Pick a color |
 | `Super + 1/2/3` | Focus workspace 1/2/3 |
-| `Super + Q/E` | Focus workspace 4/5 |
-| `Super + Shift + workspace key` | Move a window to that workspace |
+| `Super + Q/E` | Focus the left/right monitor |
+| `Super + Shift + 1/2/3` | Move a window to workspace 1/2/3 |
 | `Super + Tab` | Focus the next monitor |
 | `Super + R` | Save the last 30 seconds of replay (desktop) |
 | `Super + Shift + R` | Start/stop manual recording of the focused monitor |

@@ -51,6 +51,11 @@ hl.config({
         enabled = true,
     },
 
+    master = {
+        new_status = "inherit",
+        new_on_top = true
+    },
+
     dwindle = {
         force_split                  = 0,
         preserve_split               = false,
@@ -108,3 +113,12 @@ hl.animation({ leaf = "border", enabled = true, speed = 5, bezier = "default" })
 hl.animation({ leaf = "fade", enabled = true, speed = 1.5, bezier = "md3_decel" })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 2, bezier = "easeOutExpo", style = "slide" })
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 1.8, bezier = "md3_decel", style = "slidevert" })
+
+--------------------------------------------------------------------------------
+-- Match the window pop-in style for all Rofi menus.
+--------------------------------------------------------------------------------
+
+hl.layer_rule({
+    match = { namespace = "^rofi$" },
+    animation = "popin 60%",
+})

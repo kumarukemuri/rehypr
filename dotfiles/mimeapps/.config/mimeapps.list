@@ -24,3 +24,4 @@ x-scheme-handler/discord=vesktop.desktop
 x-scheme-handler/postman=Postman.desktop
 x-scheme-handler/ror2mm=gale-handler.desktop
 x-scheme-handler/gale=gale-handler.desktop
+x-scheme-handler/bruno=bruno.desktop
