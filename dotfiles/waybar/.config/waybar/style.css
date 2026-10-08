@@ -8,65 +8,76 @@
 }
 
 window#waybar {
-    background-color: #000000;
+    background-color: alpha(mix(shade(@primary_container, 0.2), @background, 0.4), 0.8);
 }
-
-/* Outer center container */
 .modules-center {
     color: @on_background;
-    background-color: transparent;
-    border-radius: 0;
     padding: 4px 8px;
 }
 
-/* Equal icon cells, including each individual tray item. */
-#network,
-#bluetooth,
-#wireplumber,
-#idle_inhibitor {
-    min-width: 18px;
-    padding: 0px 6px;
-    margin: 0px;
-    color: @on_background;
-    background: transparent;
-}
-
-#tray {
-    padding: 0px 6px;
-    margin: 0px;
-    background: transparent;
-}
-
-#tray > widget {
-    min-width: 18px;
-    padding: 0px;
-    margin: 0px;
-}
-
-/* Always-visible clock */
+/* The clock is the only drawer handle. */
 #clock {
-    font-weight: 600;
-    color: alpha(@primary, 0.9);
-    padding: 0px 6px;
-    margin: 2px 0px;
+    font-weight: 800;
+    color: alpha(@primary, 1);
+    padding: 0 6px;
+    margin: 2px 0;
 }
 
-#battery {
+/* clock_drawer is on the group's event box; control_elements is on its box.
+ * Keep both containers unpadded so a closed drawer takes no extra space. */
+#clockmenu,
+.clock_drawer,
+.control_elements,
+.control_elements #privacy {
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+}
+
+/* Opaque dark surfaces with a faint Matugen primary tint.
+ * Margins separate the blocks; the drawer wrappers remain unpadded. */
+.control_elements #status,
+.control_elements #tray {
+    background-color: alpha(mix(shade(@on_primary_container, 0.2), @background, 0.025), 1);
+    color: alpha(@primary, 0.9);
+    border-radius: 0;
+    margin: 0 0 0 6px;
+    padding: 0px 2px;
+}
+
+/* Apply spacing to visible icon cells, never their event-box wrappers. */
+.control_elements #privacy-item,
+.control_elements #network,
+.control_elements #bluetooth,
+.control_elements #wireplumber,
+.control_elements #idle_inhibitor {
+    min-width: 18px;
+    padding: 0 6px;
+    color: alpha(@primary, 0.9);
+}
+
+.control_elements #privacy-item image {
+    color: alpha(@primary, 0.9);
+    -gtk-icon-style: symbolic;
+}
+
+.control_elements #battery {
     font-weight: 400;
     color: alpha(@primary, 0.9);
-    padding: 0px 6px;
-    margin: 2px 0px;
+    padding: 0 6px;
+    margin: 2px 0;
 }
 
-/* One hidden group: its spacing collapses with the drawer. */
-#clockmenu,
-#controls {
-    padding: 0px;
-    margin: 0px;
-    background: transparent;
+/* Match the status inset plus its icon padding; tray spacing is 12px. */
+.control_elements #tray {
+    padding: 2px 10px;
 }
 
-/* Tray menu */
+.control_elements #tray > widget {
+    min-width: 18px;
+}
+
 #tray menu {
     padding: 6px;
     background-color: @background;
@@ -87,7 +98,6 @@ window#waybar {
     color: @outline_variant;
 }
 
-/* Tooltip */
 tooltip,
 tooltip label {
     border: none;

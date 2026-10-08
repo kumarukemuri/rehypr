@@ -7,15 +7,20 @@
   "group/clockmenu": {
     "orientation": "horizontal",
     "drawer": {
-      "transition-duration": 400,
-      "transition-left-to-right": false,
+      "children-class": "clock_drawer",
+      "transition-duration": 10,
+      "transition-left-to-right": true,
       "click-to-reveal": true,
     },
-    "modules": ["clock", "group/controls"],
+    "modules": ["clock", "group/controls#control_elements"],
   },
-  "group/controls": {
+  "group/controls#control_elements": {
     "orientation": "horizontal",
-    "modules": ["network", "bluetooth", "battery", "wireplumber", "idle_inhibitor", "tray"],
+    "modules": ["group/status", "tray", "battery"],
+  },
+  "group/status": {
+    "orientation": "horizontal",
+    "modules": ["privacy", "network", "bluetooth", "wireplumber", "idle_inhibitor"],
   },
   "clock": {
     "format": "{:%I:%M %p}",
@@ -68,7 +73,43 @@
   },
   "tray": {
     "icon-size": 16,
-    "spacing": 16,
+    "spacing": 12,
     "show-passive-items": false,
+  },
+  "privacy": {
+    "icon-spacing": 0,
+    "icon-size": 16,
+    "transition-duration": 0,
+    "modules": [
+      {
+        "type": "screenshare",
+        "icon-name": "video-display-symbolic",
+        "tooltip": true,
+        "tooltip-icon-size": 24,
+      },
+      {
+        "type": "audio-out",
+        "icon-name": "audio-headphones-symbolic",
+        "tooltip": true,
+        "tooltip-icon-size": 24,
+      },
+      {
+        "type": "audio-in",
+        "icon-name": "microphone-sensitivity-high-symbolic",
+        "tooltip": true,
+        "tooltip-icon-size": 24,
+      },
+    ],
+    "ignore-monitor": true,
+    "ignore": [
+      {
+        "type": "audio-in",
+        "name": "cava",
+      },
+      {
+        "type": "screenshare",
+        "name": "obs",
+      },
+    ],
   },
 }
