@@ -30,7 +30,7 @@ hl.config({
     },
 
     cursor = {
-        inactive_timeout = 2,
+        inactive_timeout = 15,
     },
 
     decoration = {
@@ -57,7 +57,6 @@ hl.config({
     },
 
     dwindle = {
-        smart_split                  = true,
     },
 
     gestures = {

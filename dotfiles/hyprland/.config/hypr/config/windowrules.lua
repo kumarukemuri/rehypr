@@ -66,10 +66,19 @@ rule({
 -- IDE
 rule({
     match = {
-        initial_class = "^(codium|VSCodium|vscodium|dev.zed.Zed|jetbrains-pycharm|jetbrains-idea)$",
+        initial_class = "^(codium|VSCodium|vscodium|jetbrains-pycharm|jetbrains-idea)$",
     },
     tag = "+ide",
     workspace = "2",
+})
+
+-- Zed
+rule({
+    match = {
+        initial_class = "^(dev.zed.Zed)$",
+    },
+    tag = "+zed",
+    workspace = "3",
 })
 
 -- Spotify
@@ -134,7 +143,7 @@ rule({
 
 rule({
     match = {
-        initial_class = "^(xdg-desktop-portal-gtk|org.gnome.FileRoller)$",
+        initial_class = "^(xdg-desktop-portal-gtk|org.gnome.FileRoller|org.openrgb.OpenRGB)$",
     },
     tag = "+popup",
     float = true,
