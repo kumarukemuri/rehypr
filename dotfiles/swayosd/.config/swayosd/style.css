@@ -1,37 +1,54 @@
-@import url(colors.css);
+
+@import url("colors.css");
 
 window#osd {
-    font-size: 14px;
-    border-radius: 16px;
-    background: @surface;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
 }
 
 window#osd #container {
-    margin: 6px 10px;
-    spacing: 8px;
+    border-radius: 0;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    spacing: 0;
 }
 
-window#osd image,
-window#osd label {
+window#osd image {
+    opacity: 0;
+    -gtk-icon-transform: scale(0);
+    margin-left: -48px;
+    margin-right: 0;
     padding: 0;
-    margin-right: 2px;
-    color: @primary;
-    -gtk-icon-transform: scale(0.6);
+}
+
+window#osd label {
+    opacity: 0;
+    font-size: 0;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
 }
 
 window#osd progressbar {
-    min-height: 10px;
+    min-height: 8px;
     padding: 0;
-    border-radius: 8px;
+    margin: 0;
+    border-radius: 0;
     background: transparent;
 }
 
 window#osd trough {
-    border-radius: 8px;
+    min-height: 8px;
+    border-radius: 0;
     background: @surface_container_lowest;
 }
 
 window#osd progress {
-    border-radius: 8px;
+    min-height: 8px;
+    border-radius: 0;
     background: @primary;
 }

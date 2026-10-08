@@ -59,19 +59,19 @@ bind(mainMod .. " + R", exec("bash " .. scriptDir .. "/save-replay.sh"))
 bind(mainMod .. " + SHIFT + R", exec("bash " .. scriptDir .. "/record.sh"))
 
 -- Window management ==========================================
--- hl.bind(mainMod .. " + V", function()
---     local win = hl.get_active_window()
---     if not win then return end
---     if win.floating then
---         hl.dispatch(hl.dsp.window.float({ action = "off" }))
---     else
---         hl.dispatch(hl.dsp.window.float({ action = "on" }))
---         hl.timer(function()
---             hl.dispatch(hl.dsp.window.resize({ x = 1400, y = 1000 }))
---             hl.dispatch(hl.dsp.window.center())
---         end, { timeout = 20, type = "oneshot" })
---     end
--- end)
+hl.bind(mainMod .. " + V", function()
+    local win = hl.get_active_window()
+    if not win then return end
+    if win.floating then
+        hl.dispatch(hl.dsp.window.float({ action = "off" }))
+    else
+        hl.dispatch(hl.dsp.window.float({ action = "on" }))
+        hl.timer(function()
+            hl.dispatch(hl.dsp.window.resize({ x = 1400, y = 1000 }))
+            hl.dispatch(hl.dsp.window.center())
+        end, { timeout = 20, type = "oneshot" })
+    end
+end)
 
 bind(
     mainMod .. " + Tab",
