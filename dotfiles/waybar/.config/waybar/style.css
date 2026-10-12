@@ -68,9 +68,10 @@ window#waybar {
     margin: 2px 0;
 }
 
-/* Match the status inset plus its icon padding; tray spacing is 12px. */
+/* 6px icon padding + 2px status inset + 4px tray inset = 12px tray gap. */
 .control_elements #tray {
-    padding: 2px 10px;
+    margin: 0;
+    padding: 2px 6px 2px 4px;
 }
 
 .control_elements #tray > widget {
