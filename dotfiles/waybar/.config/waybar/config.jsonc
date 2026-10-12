@@ -4,6 +4,15 @@
   "margin-top": 0,
   "spacing": 6,
   "modules-center": ["group/clockmenu"],
+  "modules-right": ["custom/microphone"],
+  "custom/microphone": {
+    "exec": "~/.config/waybar/scripts/microphone.sh",
+    "return-type": "json",
+    "format": "{text}",
+    "hide-empty-text": true,
+    "interval": 1,
+    "tooltip": true,
+  },
   "group/clockmenu": {
     "orientation": "horizontal",
     "drawer": {

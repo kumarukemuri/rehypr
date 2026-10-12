@@ -106,3 +106,12 @@ tooltip label {
     color: @on_background;
     background: @background;
 }
+
+/* This module is hidden completely while the default microphone is unmuted. */
+#custom-microphone {
+    color: @error;
+    font-size: 10px;
+    min-width: 0;
+    padding: 0 14px;
+    margin: 2px 0;
+}

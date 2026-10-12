@@ -289,7 +289,9 @@ when `xdg-user-dir` is unavailable. Area selection freezes the image while selec
 
 ## Waybar
 
-Only the clock is visible while the bar is collapsed. Hover over it to reveal
+The clock is visible while the bar is collapsed. A microphone indicator appears
+at the far right in the palette error color only when the default microphone is
+muted or unavailable; it disappears when unmuted and updates every second. Hover over it to reveal
 network, Bluetooth, the system tray, battery (when available), volume and the
 idle inhibitor. The drawer uses a 400 ms animation; there is no separate tray
 arrow or workspace indicator. The bar keeps its black background.
@@ -391,8 +393,15 @@ migrate Qt settings or restart services.
 
 Qt5ct and Qt6ct settings are created from `install/templates/qtct/*.conf.in` by setup.
 Their working configs are local files; repeated setup updates only the palette
-path and preserves other settings. Run setup once when updating from the older
+path and the application font defaults, preserving other settings. Run setup once when updating from the older
 Stow-managed Qt configuration. Existing files and symlinks are preserved.
+
+GTK 3/4 and Qt 5/6 interfaces default to JetBrainsMono Nerd Font Propo Regular,
+14 pt; Qt fixed-width text uses JetBrainsMono Nerd Font Regular, 14 pt. Setup
+also updates the GNOME/Cinnamon interface font. Restart affected applications
+to pick up these defaults. Applications with their own font settings may need
+separate changes. Panel, launcher, notification, terminal and editor fonts,
+monitor scaling and global DPI settings are unaffected.
 
 If package lists or installer actions changed, rerun `./install/setup.sh --install --dry-run`
 and then `./install/setup.sh --install` to apply them.

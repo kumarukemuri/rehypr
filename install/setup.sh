@@ -271,7 +271,7 @@ Post-install actions:
   enable and start audio user units: ${AUDIO_USER_UNITS[*]}
   enable user services: ${USER_SERVICES[*]}
   create or update Qt color paths while preserving existing settings
-  set GTK and Qt interface fonts to JetBrainsMono Nerd Font Propo 12
+  set GTK and Qt interface fonts to JetBrainsMono Nerd Font Propo 14
   create Matugen output directories
   initialize missing theme colors and wallpaper paths without reloading the desktop
   leave optional Kraken and replay services disabled unless already enabled
@@ -359,8 +359,8 @@ for qt_version in 5 6; do
     fi
 done
 
-# Match the Waybar interface font; keep all other GTK/Qt settings.
-python3 - "$TARGET_HOME" <<'PYFONT'
+# Set application fonts independently of panel and terminal fonts.
+python3 - "$TARGET_HOME" "$SCRIPT_DIR/templates/qtct" <<'PYFONT'
 import configparser
 from pathlib import Path
 import sys
@@ -376,11 +376,14 @@ for version in (3, 4, 5, 6):
     if not settings.has_section(section):
         settings.add_section(section)
     if gtk:
-        value = 'JetBrainsMono Nerd Font Propo 12'
+        value = 'JetBrainsMono Nerd Font Propo 14'
     else:
-        parts = settings.get(section, key, fallback='"Sans,12,-1,5,50,0,0,0,0,0"').strip('"').split(',')
-        parts[:2] = ['JetBrainsMono Nerd Font Propo', '12']
-        value = '"' + ','.join(parts) + '"'
+        template = Path(sys.argv[2]) / f'qt{version}ct.conf.in'
+        defaults = configparser.ConfigParser(interpolation=None)
+        defaults.read(template)
+        for font_key in ('general', 'fixed'):
+            settings.set(section, font_key, defaults.get(section, font_key))
+        value = settings.get(section, key)
     settings.set(section, key, value)
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open('w') as stream:
@@ -390,7 +393,7 @@ PYFONT
 if [[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]] && command -v gsettings >/dev/null 2>&1; then
     for schema in org.gnome.desktop.interface org.cinnamon.desktop.interface; do
         if gsettings list-schemas | grep -Fx "$schema" >/dev/null; then
-            gsettings set "$schema" font-name 'JetBrainsMono Nerd Font Propo 12'
+            gsettings set "$schema" font-name 'JetBrainsMono Nerd Font Propo 14'
         fi
     done
 fi

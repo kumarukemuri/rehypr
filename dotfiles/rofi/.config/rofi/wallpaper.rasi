@@ -1,7 +1,7 @@
 @import "./colors.rasi"
 
 * {
-    font: "JetBrainsMono Nerd Font Propo 12";
+    font: "JetBrainsMono Nerd Font Propo 14";
     text-color: @on-surface;
     background-color: @background;
 }
@@ -39,7 +39,7 @@ entry {
 }
 
 entry {
-    placeholder: "Search wallpapers...";
+    placeholder: "";
     placeholder-color: @on-primary;
 }
 
