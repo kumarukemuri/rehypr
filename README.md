@@ -12,7 +12,7 @@ adapting the configuration to other hardware and workflows.
 ## Included
 
 - Hyprland, Hypridle, Hyprlock and Hyprpaper;
-- Waybar, Rofi, Mako and SwayOSD;
+- Waybar, Rofi and Mako;
 - Kitty and Fish;
 - Impala, Bluetui, Wiremix, btop and Fastfetch;
 - Nemo with File Roller and common archive formats;
@@ -116,7 +116,7 @@ Existing files in `~/.config` may conflict with Stow. Back them up before
 running the installer. When setup finishes, log out and sign in on TTY1;
 Fish starts Hyprland automatically.
 
-Waybar, Hyprpaper, Hypridle, Mako, SwayOSD, the per-window layout helper and
+Waybar, Hyprpaper, Hypridle, Mako, the per-window layout helper and
 the GNOME Polkit agent run as systemd user services tied to the UWSM graphical
 session. The installer enables them without starting them immediately.
 
@@ -276,10 +276,12 @@ acts as `Super`, and physical left Super acts as `Alt`.
 | `Super + Volume Up/Down/Audio Mute` | Toggle microphone mute |
 | `Media Next/Previous` | Skip to the next/previous track |
 | `Media Play/Pause` | Toggle playback |
-| `Brightness Up/Down` | Raise/lower backlight brightness |
+| `Brightness Up/Down` | Raise/lower backlight brightness by 5% |
 
 See [`keybinds.lua`](dotfiles/hyprland/.config/hypr/config/keybinds.lua) for the complete
 list. Volume, microphone, media and brightness controls also work while locked.
+They use `wpctl`, `playerctl` and `brightnessctl` directly, without an on-screen
+overlay. Output volume is capped at 100%; microphone mute toggles once per press.
 
 Screenshots are copied to the clipboard and saved as timestamped PNG files in
 `$(xdg-user-dir PICTURES)/Screenshots`, falling back to `~/Pictures/Screenshots`
@@ -307,7 +309,7 @@ The wallpaper script:
 - applies the image to every active monitor reported by Hyprland;
 - generates a dark Matugen palette and writes `$image` to `~/.config/hypr/colors.conf`;
 - shares that variable between Hyprpaper and Hyprlock without rewriting their configs;
-- reloads Hyprland once and restarts only active Mako, Waybar and SwayOSD services.
+- reloads Hyprland once and restarts only active Mako and Waybar services.
 
 Theme changes leave Hypridle, Polkit and the per-window layout helper running.
 Generated Hyprland colors are local files ignored by Git, so choosing a wallpaper

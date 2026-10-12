@@ -7,7 +7,6 @@ dotfiles/themes/.local/share/themes/adw-gtk3-dark/gtk-4.0/colors.css
 dotfiles/kitty/.config/kitty/colors.conf
 dotfiles/mako/.config/mako/mako-colors
 dotfiles/rofi/.config/rofi/colors.rasi
-dotfiles/swayosd/.config/swayosd/colors.css
 dotfiles/waybar/.config/waybar/colors.css
 
 # Runtime symlinks created by systemctl --user enable

@@ -25,7 +25,6 @@ mangohud
 matugen
 polkit-gnome
 rofi
-swayosd
 waybar
 
 # Terminal utilities
@@ -71,6 +70,7 @@ tuned-ppd
 wireplumber
 
 # Commands used by the configuration
+brightnessctl
 ddcutil
 gpu-screen-recorder
 jq

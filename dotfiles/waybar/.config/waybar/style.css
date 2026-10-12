@@ -8,7 +8,7 @@
 }
 
 window#waybar {
-    background-color: alpha(mix(shade(@primary_container, 0.2), @background, 0.4), 0.8);
+    background-color: alpha(@background, 1);
 }
 .modules-center {
     color: @on_background;
@@ -39,7 +39,6 @@ window#waybar {
  * Margins separate the blocks; the drawer wrappers remain unpadded. */
 .control_elements #status,
 .control_elements #tray {
-    background-color: alpha(mix(shade(@on_primary_container, 0.2), @background, 0.025), 1);
     color: alpha(@primary, 0.9);
     border-radius: 0;
     margin: 0 0 0 6px;

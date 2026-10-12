@@ -17,7 +17,6 @@ readonly -a USER_SERVICES=(
     hyprpaper.service
     mako.service
     polkit-gnome-authentication-agent.service
-    swayosd-server.service
     waybar.service
 )
 readonly -a AUDIO_USER_UNITS=(
@@ -402,8 +401,7 @@ if [[ ! -f "$TARGET_HOME/.config/hypr/colors.conf" ||
       ! -f "$TARGET_HOME/.config/rofi/colors.rasi" ||
       ! -f "$TARGET_HOME/.config/kitty/colors.conf" ||
       ! -f "$TARGET_HOME/.config/mako/mako-colors" ||
-      ! -f "$TARGET_HOME/.config/waybar/colors.css" ||
-      ! -f "$TARGET_HOME/.config/swayosd/colors.css" ]]; then
+      ! -f "$TARGET_HOME/.config/waybar/colors.css" ]]; then
     printf 'Initializing wallpaper and application colors...\n'
     wallpaper=""
     if [[ -f "$TARGET_HOME/.config/hypr/colors.conf" ]]; then

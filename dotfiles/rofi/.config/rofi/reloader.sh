@@ -4,7 +4,7 @@ set -euo pipefail
 case "${1:-}" in
     --theme)
         hyprctl reload
-        for service in mako.service waybar.service swayosd-server.service; do
+        for service in mako.service waybar.service; do
             if systemctl --user is-active --quiet "$service"; then
                 systemctl --user restart "$service"
             fi
@@ -23,7 +23,6 @@ systemctl --user restart \
     hyprpaper.service \
     mako.service \
     polkit-gnome-authentication-agent.service \
-    swayosd-server.service \
     waybar.service
 
 notify-send "Hyprland reloaded"

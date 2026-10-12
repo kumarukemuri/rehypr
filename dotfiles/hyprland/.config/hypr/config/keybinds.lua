@@ -24,16 +24,6 @@ local function bind(keys, dispatcher, flags) hl.bind(keys, dispatcher, flags or 
 local function bind_locked(keys, cmd) bind(keys, exec(cmd), { locked = true }) end
 local function bind_locked_repeating(keys, cmd) bind(keys, exec(cmd), { locked = true, repeating = true }) end
 
-local focusedMonitorCmd =
-    [[hyprctl monitors -j | jq -er 'first(.[] | select(.focused) | .name)']]
-
-local function osd(args)
-    return [[swayosd-client --monitor "$(]] ..
-        focusedMonitorCmd ..
-        [[)" ]] ..
-        args
-end
-
 bind(mainMod .. " + C", hl.dsp.window.close())
 -- bind(mainMod .. " + GRAVE", exec(terminal))
 bind(mainMod .. " + SHIFT + C", exec(color))
@@ -114,30 +104,30 @@ bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Media control =============================================
 local media_keys = {
-    { keys = "XF86AudioNext",  cmd = "--playerctl next" },
-    { keys = "XF86AudioPrev",  cmd = "--playerctl previous" },
-    { keys = "XF86AudioPause", cmd = "--playerctl play-pause" },
-    { keys = "XF86AudioPlay",  cmd = "--play-pause" },
+    { keys = "XF86AudioNext",  cmd = "playerctl next" },
+    { keys = "XF86AudioPrev",  cmd = "playerctl previous" },
+    { keys = "XF86AudioPause", cmd = "playerctl play-pause" },
+    { keys = "XF86AudioPlay",  cmd = "playerctl play-pause" },
 }
 
 for _, mk in ipairs(media_keys) do
-    bind_locked(mk.keys, osd(mk.cmd))
+    bind_locked(mk.keys, mk.cmd)
 end
 
 -- Volume =====================================================
-bind_locked_repeating("XF86AudioRaiseVolume", osd("--output-volume +5"))
-bind_locked_repeating("XF86AudioLowerVolume", osd("--output-volume -5"))
-bind_locked_repeating("SHIFT + XF86AudioRaiseVolume", osd("--output-volume +1"))
-bind_locked_repeating("SHIFT + XF86AudioLowerVolume", osd("--output-volume -1"))
-bind_locked_repeating("XF86AudioMute", osd("--output-volume mute-toggle"))
+bind_locked_repeating("XF86AudioRaiseVolume", "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 5%+")
+bind_locked_repeating("XF86AudioLowerVolume", "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 5%-")
+bind_locked_repeating("SHIFT + XF86AudioRaiseVolume", "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 1%+")
+bind_locked_repeating("SHIFT + XF86AudioLowerVolume", "wpctl set-volume --limit 1.0 @DEFAULT_AUDIO_SINK@ 1%-")
+bind_locked("XF86AudioMute", "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
 
-bind_locked_repeating(mainMod .. " + SHIFT + M", mute)
+bind_locked(mainMod .. " + SHIFT + M", mute)
 
 -- Mic mute ===================================================
-bind_locked_repeating(mainMod .. " + XF86AudioRaiseVolume", mute)
-bind_locked_repeating(mainMod .. " + XF86AudioLowerVolume", mute)
-bind_locked_repeating(mainMod .. " + XF86AudioMute", mute)
+bind_locked(mainMod .. " + XF86AudioRaiseVolume", mute)
+bind_locked(mainMod .. " + XF86AudioLowerVolume", mute)
+bind_locked(mainMod .. " + XF86AudioMute", mute)
 
 -- Brightness ==================================================
-bind_locked_repeating("XF86MonBrightnessUp", "swayosd-client --brightness raise")
-bind_locked_repeating("XF86MonBrightnessDown", "swayosd-client --brightness lower")
+bind_locked_repeating("XF86MonBrightnessUp", "brightnessctl --class=backlight set +5%")
+bind_locked_repeating("XF86MonBrightnessDown", "brightnessctl --class=backlight --min-value=1 set 5%-")

@@ -6,7 +6,6 @@ mangohud
 matugen
 mimeapps
 rofi
-swayosd
 themes
 uwsm
 waybar
