@@ -59,26 +59,17 @@ rule({
         initial_class = "^(discord|vesktop|TeamSpeak.*|WebCord|stoat-desktop)$",
     },
     tag = "+voice",
-    workspace = "5",
+    workspace = "4",
     no_initial_focus = true,
 })
 
 -- IDE
 rule({
     match = {
-        initial_class = "^(codium|VSCodium|vscodium|jetbrains-pycharm|jetbrains-idea)$",
+        initial_class = "^(codium|VSCodium|vscodium|jetbrains-pycharm|jetbrains-idea|dev.zed.Zed)$",
     },
     tag = "+ide",
     workspace = "2",
-})
-
--- Zed
-rule({
-    match = {
-        initial_class = "^(dev.zed.Zed)$",
-    },
-    tag = "+zed",
-    workspace = "3",
 })
 
 -- Spotify
@@ -105,9 +96,8 @@ rule({
         class = "(?i)^(steam_app_[0-9]+)$",
     },
     workspace = "6",
-    idle_inhibit = "always",
-    float = true,
-    no_initial_focus = true,
+    idle_inhibit = "focus",
+    float = false,
 })
 
 -- Steam
@@ -169,5 +159,5 @@ rule({
         initial_class = "^(md.obsidian.Obsidian)$",
     },
     tag = "+note",
-    workspace = "2",
+    workspace = "3",
 })

@@ -39,7 +39,7 @@ window#waybar {
  * Margins separate the blocks; the drawer wrappers remain unpadded. */
 .control_elements #status,
 .control_elements #tray {
-    color: alpha(@primary, 0.9);
+    color: alpha(@foreground, 0.8);
     border-radius: 0;
     margin: 0 0 0 6px;
     padding: 0px 2px;
@@ -53,17 +53,17 @@ window#waybar {
 .control_elements #idle_inhibitor {
     min-width: 18px;
     padding: 0 6px;
-    color: alpha(@primary, 0.9);
+    color: alpha(@foreground, 0.8);
 }
 
 .control_elements #privacy-item image {
-    color: alpha(@primary, 0.9);
+    color: alpha(@foreground, 0.8);
     -gtk-icon-style: symbolic;
 }
 
 .control_elements #battery {
     font-weight: 400;
-    color: alpha(@primary, 0.9);
+    color: alpha(@foreground, 0.8);
     padding: 0 6px;
     margin: 2px 0;
 }
