@@ -1,5 +1,10 @@
 local C = require("config.colors")
 
+local function border_color(color)
+    -- Matugen stores ARGB; use 65% opacity for the active gradient.
+    return "rgba(" .. color:sub(5) .. "a6)"
+end
+
 hl.env("XCURSOR_SIZE", "24")
 
 hl.config({
@@ -14,7 +19,14 @@ hl.config({
     general = {
         gaps_in = 0,
         gaps_out = 0,
-        border_size = 0,
+        border_size = 6,
+        col = {
+            active_border = {
+                colors = { border_color(C.primary), border_color(C.secondary), border_color(C.tertiary) },
+                angle = 45,
+            },
+            inactive_border = "rgb(000000)",
+        },
         resize_on_border = true,
         allow_tearing = false,
     },

@@ -8,7 +8,7 @@
 }
 
 window#waybar {
-    background-color: alpha(@background, 1);
+    background-color: black;
 }
 .modules-center {
     color: @on_background;

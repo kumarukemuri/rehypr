@@ -63,10 +63,10 @@ hl.bind(mainMod .. " + V", function()
     end
 end)
 
-bind(
-    mainMod .. " + Tab",
-    hl.dsp.focus({ monitor = "+1" })
-)
+-- bind(
+--     mainMod .. " + Tab",
+--     hl.dsp.focus({ monitor = "+1" })
+-- )
 
 -- Workspace navigation =======================================
 -- local workspaces_left = { { key = "Q", id = 4 }, { key = "E", id = 5 } }

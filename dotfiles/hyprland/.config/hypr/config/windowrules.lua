@@ -1,12 +1,17 @@
 -- Apply geometry in the same rule that makes a window floating: float matching
 -- alone can run before that rule's initial floating state has been applied.
 local function rule(config)
-    if config.float == true then
+    local excluded =
+        config.tag == "+steam_app"
+
+    if config.float == true and not excluded then
         config.center = true
         config.size = { 1400, 1000 }
     end
+
     return hl.window_rule(config)
 end
+
 
 -- Windows that are already floating by default (dialogs, utility windows).
 rule({
@@ -50,7 +55,7 @@ rule({
         initial_class = "^(Mattermost|Mattermost.Desktop)$",
     },
     tag = "+mattermost",
-    workspace = "5",
+    workspace = "4",
 })
 
 -- Voice apps
@@ -59,7 +64,7 @@ rule({
         initial_class = "^(discord|vesktop|TeamSpeak.*|WebCord|stoat-desktop)$",
     },
     tag = "+voice",
-    workspace = "4",
+    workspace = "5",
     no_initial_focus = true,
 })
 
@@ -91,13 +96,15 @@ rule({
 })
 
 -- Games
+
 rule({
     match = {
-        class = "(?i)^(steam_app_[0-9]+)$",
+        class = "(?i)^steam_app_([0-9]+|default)$",
     },
-    workspace = "6",
+    fullscreen = true,
     idle_inhibit = "focus",
-    float = false,
+    tag = "+steam_app",
+    workspace = "6",
 })
 
 -- Steam
@@ -113,10 +120,12 @@ rule({
 -- Terminal tools
 rule({
     match = {
-        initial_class = "^(kitty|wiremix|btop|impala|bluetui)$",
+        class = "^(kitty)$",
     },
     tag = "+shell",
     workspace = "4",
+    float = false,
+    pin = true,
 })
 
 -- Explorer

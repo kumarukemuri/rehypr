@@ -9,7 +9,7 @@ return function(outputs)
     hl.monitor({
         output = outputs.main,
         mode = "3440x1440@360",
-        position = "2560x500",
+        position = "2560x700",
         scale = 1,
         bitdepth = 10,
         cm = "srgb",
@@ -26,8 +26,7 @@ return function(outputs)
         cm = "srgb",
         vrr = 0,
     })
-
-    hl.monitor({
+   hl.monitor({
         output = outputs.down,
         mode = "2560x1440@144",
         position = "0x1440",

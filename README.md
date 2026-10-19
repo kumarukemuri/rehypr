@@ -235,9 +235,13 @@ systemctl --user status gpu-screen-recorder-replay.service
 service. On laptop the shortcut reports that replay is unavailable.
 
 `Super + Shift + R` starts manual recording of the focused monitor; press it
-again to stop and save the MP4 in `~/Videos/Recordings`. Manual recording uses
-a separate service with the same video and audio settings as replay and works
-on either profile. The service is started only by the shortcut, not at login.
+again to stop and save a silent H.264 MP4 in `~/Videos/Recordings`. Manual clips
+use GPU encoding at 30 FPS, with the image scaled to fit within 1920×1080 while
+preserving its aspect ratio. The `medium` constant-quality preset reduces file
+size for simple scenes; size varies with content. The cursor is included and
+audio is omitted. These are video clips; automatic looping depends on the player.
+Manual recording works on either profile and uses a separate service started
+only by the shortcut, not at login. Replay retains its own video and audio settings.
 
 ## Keyboard shortcuts
 

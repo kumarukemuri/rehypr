@@ -1,5 +1,5 @@
 [Unit]
-Description=GPU Screen Recorder manual recording
+Description=GPU Screen Recorder compact silent clips
 PartOf=graphical-session.target
 After=graphical-session.target pipewire.service wireplumber.service
 ConditionEnvironment=WAYLAND_DISPLAY
@@ -7,6 +7,7 @@ ConditionEnvironment=WAYLAND_DISPLAY
 [Service]
 Type=exec
 ExecStart=/usr/bin/bash %h/.config/hypr/scripts/record.sh --run
+ExecStopPost=/usr/bin/bash %h/.config/hypr/scripts/record.sh --finished
 KillSignal=SIGINT
 TimeoutStopSec=60s
 Slice=background-graphical.slice

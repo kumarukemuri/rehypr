@@ -4,13 +4,18 @@ set -Eeuo pipefail
 readonly service=gpu-screen-recorder-record.service
 readonly output_dir="$HOME/Videos/Recordings"
 
+if [[ "${1:-}" == --finished ]]; then
+    if [[ "${SERVICE_RESULT:-unknown}" != success ]]; then
+        notify-send -u critical 'GPU Screen Recorder' 'Recording failed; check the recording service journal'
+    fi
+    exit 0
+fi
+
 if [[ "${1:-}" == --run ]]; then
     mkdir -p "$output_dir"
     monitor="$(hyprctl monitors -j | jq -er 'first(.[] | select(.focused) | .name)')"
     exec /usr/bin/gpu-screen-recorder -v no -w "$monitor" \
-        -f 60 -fm cfr -c mp4 -k hevc -encoder gpu -bm cbr -q 12000 \
-        -ac opus -ab 192 \
-        -a 'app-inverse:discord|app-inverse:vesktop|app-inverse:telegram|app-inverse:zen|app-inverse:spotify|app-inverse:mattermost|app-inverse:steam' \
+        -s 1920x1080 -f 30 -fm cfr -c mp4 -k h264 -encoder gpu -bm qp -q medium \
         -cursor yes -cr limited -keyint 2 \
         -o "$output_dir/Recording-$(date +%Y-%m-%d_%H-%M-%S-%N).mp4"
 fi
@@ -21,14 +26,14 @@ flock -n 9 || exit 0
 if systemctl --user is-active --quiet "$service"; then
     if systemctl --user stop "$service" &&
         [[ "$(systemctl --user show --property=Result --value "$service")" == success ]]; then
-        notify-send 'GPU Screen Recorder' "Recording saved to $output_dir"
+        notify-send 'GPU Screen Recorder' "Silent MP4 saved to $output_dir"
     else
         notify-send -u critical 'GPU Screen Recorder' 'Recording failed; check the recording service journal'
         exit 1
     fi
 else
     if systemctl --user start "$service"; then
-        notify-send 'GPU Screen Recorder' 'Recording started. Press Super+Shift+R to stop.'
+        notify-send 'GPU Screen Recorder' 'Silent clip recording started. Press Super+Shift+R to stop.'
     else
         notify-send -u critical 'GPU Screen Recorder' 'Could not start recording; check the recording service journal'
         exit 1
