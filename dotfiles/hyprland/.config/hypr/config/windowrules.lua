@@ -17,7 +17,6 @@ end
 rule({
     match = { float = true },
     center = true,
-    size = { 1400, 1000 },
 })
 
 -- Browsers
@@ -35,7 +34,7 @@ rule({
         initial_class = "^(org.telegram.desktop)$",
     },
     tag = "+chat",
-    workspace = "5",
+    workspace = "4",
 })
 
 -- Telegram Media Viewer
@@ -64,7 +63,7 @@ rule({
         initial_class = "^(discord|vesktop|TeamSpeak.*|WebCord|stoat-desktop)$",
     },
     tag = "+voice",
-    workspace = "5",
+    workspace = "4",
     no_initial_focus = true,
 })
 
@@ -83,7 +82,7 @@ rule({
         initial_class = "Spotify",
     },
     tag = "+Spotify",
-    workspace = "5",
+    workspace = "special:music silent",
 })
 
 -- MPV
@@ -123,9 +122,17 @@ rule({
         class = "^(kitty)$",
     },
     tag = "+shell",
-    workspace = "4",
-    float = false,
-    pin = true,
+    workspace = "5",
+})
+
+-- Obsidian
+
+rule({
+    match = {
+        initial_class = "^(md.obsidian.Obsidian)$",
+    },
+    tag = "+note",
+    workspace = "5",
 })
 
 -- Explorer
@@ -135,14 +142,13 @@ rule({
         initial_class = "^(Nemo|nemo)$",
     },
     tag = "+explorer",
-    float = true,
 })
 
 -- Popups
 
 rule({
     match = {
-        initial_class = "^(xdg-desktop-portal-gtk|org.gnome.FileRoller|org.openrgb.OpenRGB)$",
+        initial_class = "^(xdg-desktop-portal-gtk)$",
     },
     tag = "+popup",
     float = true,
@@ -158,15 +164,4 @@ rule({
     tag = "+polkit",
     float = true,
     pin = true,
-})
-
-
--- Obsidian
-
-rule({
-    match = {
-        initial_class = "^(md.obsidian.Obsidian)$",
-    },
-    tag = "+note",
-    workspace = "3",
 })

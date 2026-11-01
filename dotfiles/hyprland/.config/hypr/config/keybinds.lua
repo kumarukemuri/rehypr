@@ -69,6 +69,8 @@ end)
 -- )
 
 -- Workspace navigation =======================================
+bind(mainMod .. " + M", hl.dsp.workspace.toggle_special("music"))
+
 -- local workspaces_left = { { key = "Q", id = 4 }, { key = "E", id = 5 } }
 local workspaces_main = { { key = "1", id = 1 }, { key = "2", id = 2 }, { key = "3", id = 3 } }
 

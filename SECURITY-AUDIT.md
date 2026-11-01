@@ -10,6 +10,13 @@ performed. The old history is retained only in an external local backup bundle.
 
 ### High: SSH host-key replacement bypassed server authentication
 
+**Superseded 2026-10-26 by explicit user preference:** `rcssh` skips host-key
+verification for validated `ru-central1.internal` destinations using
+`StrictHostKeyChecking=no`, null user/global known-hosts files and
+`UpdateHostKeys=no`. Saved keys are untouched. These disposable-VM connections
+do not authenticate server identity; ordinary SSH is unaffected. The following
+paragraphs describe the October 1 implementation.
+
 `rcssh.fish` fetched unauthenticated keys with ssh-keyscan, deleted saved host
 and address keys when none matched, then connected with accept-new. An attacker
 able to impersonate the endpoint could replace the trusted key. The internal

@@ -26,8 +26,10 @@ with tempfile.TemporaryDirectory(prefix='rehypr-security-') as td:
         path.write_text('#!/bin/sh\n'+body+'\n'); path.chmod(0o755)
     source = 'source "$AUDIT_REPO/dotfiles/fish/.config/fish/functions/rcssh.fish"; rcssh $argv'
     result = subprocess.run(['fish', '--no-config', '-c', source, '--', 'user@vm.ru-central1.internal', 'uptime'], env=env, capture_output=True)
-    assert result.returncode == 255  # Changed-key failure must propagate.
-    assert log.read_text().splitlines() == ['-o','StrictHostKeyChecking=ask','--','user@vm.ru-central1.internal','uptime']
+    assert result.returncode == 255  # SSH exit status must propagate.
+    assert log.read_text().splitlines() == ['-o','StrictHostKeyChecking=no',
+        '-o','UserKnownHostsFile=/dev/null','-o','GlobalKnownHostsFile=/dev/null',
+        '-o','UpdateHostKeys=no','--','user@vm.ru-central1.internal','uptime']
     log.unlink()
     for dest in ('-oProxyCommand=bad@vm.ru-central1.internal', 'host.example.org', 'x;bad.ru-central1.internal'):
         result = subprocess.run(['fish','--no-config','-c',source,'--',dest],env=env,capture_output=True)
@@ -46,4 +48,4 @@ with tempfile.TemporaryDirectory(prefix='rehypr-security-') as td:
         config.write_text('[config]\n[templates.audit]\ninput_path = '+json.dumps(str(TEMPLATE))+'\noutput_path = '+json.dumps(str(output))+'\n')
         subprocess.run(['matugen','-c',str(config),'image','--prefer','darkness',str(image)],check=True,capture_output=True)
         subprocess.run(['lua','-e','local colors=dofile('+json.dumps(str(output))+'); assert(REHYPR_AUDIT_MARKER == nil); assert(colors.background ~= nil)'],check=True)
-print('PASS: SSH changed-key failures preserved, option injection rejected, unsafe wallpaper paths blocked, Lua filename injection removed.')
+print('PASS: SSH disposable-host options scoped, option injection rejected, unsafe wallpaper paths blocked, Lua filename injection removed.')

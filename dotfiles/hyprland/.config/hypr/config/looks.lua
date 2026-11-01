@@ -63,12 +63,8 @@ hl.config({
         enabled = false,
     },
 
-    master = {
-        new_status = "inherit",
-        new_on_top = true
-    },
-
     dwindle = {
+
     },
 
     gestures = {

@@ -256,6 +256,7 @@ acts as `Super`, and physical left Super acts as `Alt`.
 | `Super + C` | Close the active window |
 | `Super + F` | Toggle fullscreen |
 | `Super + V` | Toggle floating mode |
+| `Super + M` | Show/hide the music special workspace (Spotify) |
 | `Super + W/A/S/D` | Focus a window by direction |
 | `Super + Shift + W/A/S/D` | Move the active window up/left/down/right |
 | `Super + Delete` | Open the power menu |
@@ -440,6 +441,8 @@ See [SECURITY-AUDIT.md](SECURITY-AUDIT.md) for the 2026-10-01 review, fixes,
 validation and remaining limitations. Run `python3 install/tests/test_security.py`
 to check SSH trust handling and wallpaper template injection regressions.
 
-`rcssh` now rejects changed host keys rather than replacing them automatically.
-Verify a rebuilt server's fingerprint independently before updating known_hosts.
+`rcssh` accepts current host keys without prompting for disposable
+`*.ru-central1.internal` VMs. It ignores saved host keys and does not update
+`known_hosts`; this also disables server identity verification for these wrapper
+connections. Ordinary `ssh` keeps its configured verification.
 The 60-second idle rule turns the display off; it is not an inactivity lock.
