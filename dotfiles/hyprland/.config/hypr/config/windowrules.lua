@@ -122,7 +122,7 @@ rule({
         class = "^(kitty)$",
     },
     tag = "+shell",
-    workspace = "5",
+    workspace = "4",
 })
 
 -- Obsidian

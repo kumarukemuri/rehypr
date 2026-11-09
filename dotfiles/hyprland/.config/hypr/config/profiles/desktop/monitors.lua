@@ -2,14 +2,14 @@ return function(outputs)
     hl.config({
         render = {
             cm_enabled = true,
-            cm_auto_hdr = 1,
+            cm_auto_hdr = 0,
         }
     })
 
     hl.monitor({
         output = outputs.main,
         mode = "3440x1440@360",
-        position = "2560x1000",
+        position = "0x0",
         scale = 1,
         bitdepth = 10,
         cm = "srgb",
@@ -17,21 +17,11 @@ return function(outputs)
     })
 
     hl.monitor({
-        output = outputs.up,
-        mode = "2560x1440@144",
-        position = "0x0",
+        output = outputs.secondary,
+        mode = "2560x1440@165",
+        position = "-1440x-400",
         scale = 1,
-        transform = 0,
-        bitdepth = 8,
-        cm = "srgb",
-        vrr = 0,
-    })
-   hl.monitor({
-        output = outputs.down,
-        mode = "2560x1440@144",
-        position = "0x1440",
-        scale = 1,
-        transform = 0,
+        transform = 1,
         bitdepth = 8,
         cm = "srgb",
         vrr = 0,

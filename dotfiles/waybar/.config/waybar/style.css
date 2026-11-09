@@ -61,16 +61,11 @@ window#waybar {
     -gtk-icon-style: symbolic;
 }
 
-.control_elements #battery,
-.control_elements #custom-wow-forever {
+.control_elements #battery {
     font-weight: 400;
     color: alpha(@foreground, 0.8);
     padding: 0 6px;
     margin: 2px 0;
-}
-
-.control_elements #custom-wow-forever.live {
-    color: @primary;
 }
 
 /* 6px icon padding + 2px status inset + 4px tray inset = 12px tray gap. */

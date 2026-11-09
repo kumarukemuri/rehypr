@@ -96,8 +96,16 @@ bind(mainMod .. " + D", hl.dsp.focus({ direction = "r" }))
 bind(mainMod .. " + A", hl.dsp.focus({ direction = "l" }))
 -- bind(mainMod .. " + E", hl.dsp.focus({ monitor = "r" }))
 -- bind(mainMod .. " + Q", hl.dsp.focus({ monitor = "l" }))
-bind(mainMod .. " + SHIFT + W", hl.dsp.window.move({ direction = "u" }))
-bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ direction = "d" }))
+local function move_vertical(direction, scrolling_direction)
+    local workspace = hl.get_active_workspace()
+    if workspace and workspace.tiled_layout == "scrolling" then
+        hl.dispatch(hl.dsp.layout("swapcol " .. scrolling_direction))
+    else
+        hl.dispatch(hl.dsp.window.move({ direction = direction }))
+    end
+end
+bind(mainMod .. " + SHIFT + W", function() move_vertical("u", "l") end)
+bind(mainMod .. " + SHIFT + S", function() move_vertical("d", "r") end)
 bind(mainMod .. " + SHIFT + D", hl.dsp.window.move({ direction = "r" }))
 bind(mainMod .. " + SHIFT + A", hl.dsp.window.move({ direction = "l" }))
 

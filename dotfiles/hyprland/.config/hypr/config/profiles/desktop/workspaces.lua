@@ -23,29 +23,15 @@ return function(outputs)
         })
     end
 
-    for _, id in ipairs({ 4 }) do
+    -- Vertical display
+    hl.config({ scrolling = { column_width = 0.33, fullscreen_on_one_column = false, wrap_swapcol = false } })
+    for _, id in ipairs({ 4, 5, 7 }) do
         rule({
             workspace = tostring(id),
-            monitor = outputs.up,
-            layout = "dwindle",
+            monitor = outputs.secondary,
+            layout = "scrolling",
+            layout_opts = { direction = "down" },
         })
     end
 
-    for _, id in ipairs({ 5 }) do
-        rule({
-            workspace = tostring(id),
-            monitor = outputs.down,
-            layout = "dwindle",
-        })
-    end
-
-
-
-
-    -- TV
-    rule({
-        workspace = 7,
-        monitor = outputs.left,
-        layout = "dwindle"
-    })
 end

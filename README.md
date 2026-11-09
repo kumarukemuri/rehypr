@@ -147,7 +147,7 @@ restow and pull preserve it. Invalid values are reported instead of silently
 choosing a profile. Reload Hyprland after changing it; application autostart runs
 only at session startup.
 
-- **Desktop:** keeps the three-monitor layout, workspace assignments and startup
+- **Desktop:** keeps the two-monitor layout, workspace assignments and startup
   of Kitty, Zen, Obsidian, Telegram and Mattermost. Mouse-specific settings apply here.
 - **Laptop:** `eDP-1` uses its preferred mode, scale 2, position `0x0` and 8-bit
   color. Hyprland calls automatic mode selection `preferred`, not `auto`.
@@ -422,10 +422,9 @@ To remove the links, run `stow --delete` with the packages listed in
 
 ## Notes
 
-- The desktop monitor layout expects `DP-1`, `DP-2` and `HDMI-A-1`.
-- Workspaces 1–3 use Dwindle on `DP-1`; workspace 4 on `HDMI-A-1` and
-  workspace 5 on `DP-2` use vertical scrolling. Workspace 7 also maps to
-  `HDMI-A-1` with Dwindle.
+- The desktop monitor layout uses the ultrawide on `DP-1` and the portrait display on `DP-2`.
+- Workspaces 1–3 use Dwindle and workspace 6 uses Master on `DP-1`.
+  Workspaces 4, 5 and 7 use vertical Scrolling on `DP-2`, with windows initially taking 33% of the viewport height.
 - The keyboard layout switches between `us` and `ru` with Caps Lock.
 - Desktop autostart launches Kitty, Zen Browser and Mattermost Desktop. Mattermost
   is not in the package lists; install it separately or remove its autostart entry.
